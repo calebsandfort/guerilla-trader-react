@@ -45,7 +45,6 @@
     "react-router-redux": "5.0.0-alpha.6",
     "redux": "3.6.0",
     "redux-thunk": "2.1.0"
-//    "semantic-ui": "2.2.13"
   },
   "devDependencies": {
     "autoprefixer": "7.1.4",
