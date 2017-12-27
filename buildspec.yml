@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Install started on `date`
+      - npm install
+  pre_build:
+    commands:
+      - echo Pre-Build started on `date`
+      - npm run prebuild-aws
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run build-aws
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  artifacts:
+    files:
+      - '**/*'
+    base-directory: dist

@@ -29,6 +29,9 @@ node_modules
 #dist folder
 dist
 
+semantic
+!semantic/src/theme.config
+
 # IDEA/Webstorm project files
 .idea
 *.iml

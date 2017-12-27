@@ -1,4 +1,5 @@
 export default {
+  tradingAccounts: [],
   fuelSavings: {
     newMpg: '',
     tradeMpg: '',

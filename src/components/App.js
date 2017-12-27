@@ -3,9 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, NavLink, Route } from 'react-router-dom';
 import HomePage from './HomePage';
-import FuelSavingsPage from './containers/FuelSavingsPage';
-import AboutPage from './AboutPage';
 import NotFoundPage from './NotFoundPage';
+import TradingAccountsPage from './tradingAccount/TradingAccountsPage';
 
 // This is a class-based component because the current
 // version of hot reloading won't hot reload a stateless
@@ -13,22 +12,22 @@ import NotFoundPage from './NotFoundPage';
 
 class App extends React.Component {
   render() {
-    const activeStyle = { color: 'blue' };
     return (
       <div>
-        <div>
-          <NavLink exact to="/" activeStyle={activeStyle}>Home</NavLink>
-          {' | '}
-          <NavLink to="/fuel-savings" activeStyle={activeStyle}>Demo App</NavLink>
-          {' | '}
-          <NavLink to="/about" activeStyle={activeStyle}>About</NavLink>
+        <div className="ui container">
+          <div className="ui secondary pointing menu">
+            <div className="header item">Guerilla Trader</div>
+            <NavLink exact to="/" className="item" activeClassName="active">Home</NavLink>
+            <NavLink to="/tradingAccounts" className="item" activeClassName="active">Accounts</NavLink>
+          </div>
         </div>
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/fuel-savings" component={FuelSavingsPage} />
-          <Route path="/about" component={AboutPage} />
-          <Route component={NotFoundPage} />
-        </Switch>
+        <div className="ui container" style={{paddingTop: "10px"}}>
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route path="/tradingAccounts" component={TradingAccountsPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </div>
       </div>
     );
   }
