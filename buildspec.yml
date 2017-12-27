@@ -19,4 +19,4 @@ phases:
 artifacts:
   artifacts:
     files:
-      - 'dist/icons.svg'
+      - 'package.json'
