@@ -5,7 +5,7 @@ const express = require('express'),
 /*eslint-disable no-console */
 
 const port = 8080;
-const app = express.createServer();
+const app = express();
 
 app.use(compression());
 app.use(express.static(__dirname));
