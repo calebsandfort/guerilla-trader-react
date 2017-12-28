@@ -27,7 +27,10 @@ export default {
   plugins: [
     new CopyWebpackPlugin([
       // {output}/to/file.txt
-      { from: 'tools/app.dist.js', to: 'app.js' }
+      { from: 'tools/dist-files/app.dist.js', to: 'app.js' },
+      { from: 'tools/dist-files/start_server.sh', to: 'start_server.sh' },
+      { from: 'tools/dist-files/stop_server.sh', to: 'stop_server.sh' },
+      { from: 'appspec.yml', to: 'appspec.yml' }
     ]),
     // Hash the files using MD5 so that their names change when the content changes.
     new WebpackMd5Hash(),
