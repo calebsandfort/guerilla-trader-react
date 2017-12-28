@@ -30,6 +30,7 @@ export default {
       { from: 'tools/dist-files/app.dist.js', to: 'app.js' },
       { from: 'tools/dist-files/start_server.sh', to: 'start_server.sh' },
       { from: 'tools/dist-files/stop_server.sh', to: 'stop_server.sh' },
+      { from: 'tools/dist-files/package.json', to: 'package.json' },
       { from: 'appspec.yml', to: 'appspec.yml' }
     ]),
     // Hash the files using MD5 so that their names change when the content changes.
