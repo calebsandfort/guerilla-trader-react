@@ -4,11 +4,14 @@ files:
   - source: /
     destination: /var/www/html/guerilla-trader-react
 hooks:
-  ApplicationStart:
+  AfterInstall:
     - location: start_server.sh
       timeout: 300
       runas: root
-  ApplicationStop:
+    - location: start_server.sh
+      timeout: 300
+      runas: root
+  BeforeInstall:
     - location: stop_server.sh
       timeout: 300
       runas: root
