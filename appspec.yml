@@ -2,13 +2,13 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/html/app
+    destination: /home/ec2-user/app
 hooks:
   AfterInstall:
     - location: start_server.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
   ApplicationStop:
     - location: stop_server.sh
       timeout: 300
-      runas: root
+      runas: ec2-user

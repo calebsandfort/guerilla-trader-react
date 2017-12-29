@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /var/www/html/app/
+cd /home/ec2-user/app/
 npm install
-node app.js
+node app.js &
 
