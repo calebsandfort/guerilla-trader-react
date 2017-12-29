@@ -2,13 +2,13 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/www/html/guerilla-trader-react
+    destination: /var/www/html/app
 hooks:
   AfterInstall:
     - location: start_server.sh
       timeout: 300
       runas: root
-  BeforeInstall:
+  ApplicationStop:
     - location: stop_server.sh
       timeout: 300
       runas: root

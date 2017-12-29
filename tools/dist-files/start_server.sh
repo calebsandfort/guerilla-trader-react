@@ -1,4 +1,4 @@
 #!/bin/bash
 npm install
-node app.js
+node /var/www/html/app/app.js
 
