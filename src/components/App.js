@@ -18,7 +18,7 @@ class App extends React.Component {
           <div className="ui secondary pointing menu">
             <div className="header item">Guerilla Trader</div>
             <NavLink exact to="/" className="item" activeClassName="active">Home</NavLink>
-            <NavLink to="/tradingAccounts" className="item" activeClassName="active">Accounts</NavLink>
+            <NavLink to="/tradingAccounts" className="item" activeClassName="active">Mock Accounts</NavLink>
           </div>
         </div>
         <div className="ui container" style={{paddingTop: "10px"}}>

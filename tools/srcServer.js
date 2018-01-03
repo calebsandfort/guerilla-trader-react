@@ -9,6 +9,7 @@ import historyApiFallback from 'connect-history-api-fallback';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import logger from 'morgan';
 import config from '../webpack.config.dev';
 
 const bundler = webpack(config);
@@ -24,7 +25,7 @@ browserSync({
 
     middleware: [
       historyApiFallback(),
-
+      logger('dev'),
       webpackDevMiddleware(bundler, {
         // Dev middleware can't access config, so we provide publicPath
         publicPath: config.output.publicPath,

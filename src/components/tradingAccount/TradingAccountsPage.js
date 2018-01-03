@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import * as tradingAccountActions from '../../actions/tradingAccountActions';
+import * as tradingAccountActions from '../../actions/sequelizeTradingAccountActions';
 import TradingAccountList from './TradingAccountList';
 
 class TradingAccountsPage extends React.Component {
@@ -20,7 +20,7 @@ class TradingAccountsPage extends React.Component {
     return (
       <div>
         <input type="submit"
-               value="Add TradingAccount"
+               value="Add Trading Account"
                className="ui primary button"
                onClick={this.redirectToAddTradingAccountPage}/>
         <TradingAccountList tradingAccounts={this.props.tradingAccounts}/>
@@ -36,7 +36,7 @@ TradingAccountsPage.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    tradingAccounts: state.tradingAccounts
+    tradingAccounts: state.sequelizeTradingAccounts
   };
 }
 

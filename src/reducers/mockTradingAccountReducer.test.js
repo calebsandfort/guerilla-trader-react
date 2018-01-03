@@ -1,9 +1,9 @@
 import expect from 'expect';
-import tradingAccountReducer from './tradingAccountReducer';
-import * as actions from '../actions/tradingAccountActions';
+import tradingAccountReducer from './mockTradingAccountReducer';
+import * as actions from '../actions/mockTradingAccountActions';
 
-describe('TradingAccount Reducer', () => {
-  it('should add tradingAccount when passed CREATE_TRADING_ACCOUNT_SUCCESS', () => {
+describe('Mock TradingAccount Reducer', () => {
+  it('should add tradingAccount when passed MOCK_CREATE_TRADING_ACCOUNT_SUCCESS', () => {
     // arrange
     const initialState = [
       {Name: 'A'},
@@ -24,7 +24,7 @@ describe('TradingAccount Reducer', () => {
     expect(newState[2].Name).toEqual('C');
   });
 
-  it('should update tradingAccount when passed UPDATE_TRADING_ACCOUNT_SUCCESS', () => {
+  it('should update tradingAccount when passed MOCK_UPDATE_TRADING_ACCOUNT_SUCCESS', () => {
     // arrange
     const initialState = [
       {Id: 1, Name: 'A'},

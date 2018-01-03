@@ -3,15 +3,15 @@ import * as types from '../constants/actionTypes';
 import {beginAjaxCall, ajaxCallError} from './ajaxStatusActions';
 
 export function loadTradingAccountsSuccess(tradingAccounts) {
-  return {type: types.LOAD_TRADING_ACCOUNTS_SUCCESS, tradingAccounts};
+  return {type: types.MOCK_LOAD_TRADING_ACCOUNTS_SUCCESS, tradingAccounts};
 }
 
 export function createTradingAccountSuccess(tradingAccount) {
-  return {type: types.CREATE_TRADING_ACCOUNT_SUCCESS, tradingAccount};
+  return {type: types.MOCK_CREATE_TRADING_ACCOUNT_SUCCESS, tradingAccount};
 }
 
 export function updateTradingAccountSuccess(tradingAccount) {
-  return {type: types.UPDATE_TRADING_ACCOUNT_SUCCESS, tradingAccount};
+  return {type: types.MOCK_UPDATE_TRADING_ACCOUNT_SUCCESS, tradingAccount};
 }
 //
 // export function updateTradingAccountSuccess(tradingAccount) {
