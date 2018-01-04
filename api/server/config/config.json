@@ -1,0 +1,18 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "Password1",
+    "database": "GuerillaTrader",
+    "host": "traderapp.coodvv92tgpv.us-west-2.rds.amazonaws.com",
+    "dialect": "mssql",
+    "port": 1433
+  },
+  "production": {
+    "username": "admin",
+    "password": "Password1",
+    "database": "GuerillaTrader",
+    "host": "traderapp.coodvv92tgpv.us-west-2.rds.amazonaws.com",
+    "dialect": "mssql",
+    "port": 1433
+  }
+}

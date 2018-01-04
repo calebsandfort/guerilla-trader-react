@@ -1,4 +1,4 @@
-import TradingAccountApi from '../api/sequelizeTradingAccountApi';
+import TradingAccountService from '../services/sequelizeTradingAccountService';
 import * as types from '../constants/actionTypes';
 import {beginAjaxCall, ajaxCallError} from './ajaxStatusActions';
 
@@ -24,7 +24,7 @@ export function updateTradingAccountSuccess(tradingAccount) {
 export function loadTradingAccounts() {
   return function (dispatch) {
     dispatch(beginAjaxCall());
-    return TradingAccountApi.getAllTradingAccounts().then(response => {
+    return TradingAccountService.getAllTradingAccounts().then(response => {
       dispatch(loadTradingAccountsSuccess(response.data));
     }).catch(response => {
       dispatch(ajaxCallError(response));

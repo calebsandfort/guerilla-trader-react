@@ -1,4 +1,4 @@
-import TradingAccountApi from '../api/mockTradingAccountApi';
+import TradingAccountApi from '../services/mockTradingAccountApi';
 import * as types from '../constants/actionTypes';
 import {beginAjaxCall, ajaxCallError} from './ajaxStatusActions';
 
