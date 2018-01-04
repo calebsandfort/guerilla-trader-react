@@ -1,5 +1,6 @@
 export default {
   tradingAccounts: [],
+  markets: [],
   fuelSavings: {
     newMpg: '',
     tradeMpg: '',

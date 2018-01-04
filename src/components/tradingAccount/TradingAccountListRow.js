@@ -30,8 +30,8 @@ class TradingAccountListRow extends React.Component {
             <td>{numeral(this.props.tradingAccount.CurrentCapital).format('$0,0.00')}</td>
             <td>{numeral(this.props.tradingAccount.Commissions).format('$0,0.00')}</td>
             <td>{numeral(this.props.tradingAccount.ProfitLoss).format('$0,0.00')}</td>
-            <td>{numeral(this.props.tradingAccount.TotalReturn).format('$0.00%')}</td>
-            <td>{numeral(this.props.tradingAccount.CAGR).format('$0.00%')}</td>
+            <td>{numeral(this.props.tradingAccount.TotalReturn).format('0,0.00%')}</td>
+            <td>{numeral(this.props.tradingAccount.CAGR).format('0,0.00%')}</td>
             <td><Moment format="MM/DD/YYYY">{this.props.tradingAccount.InceptionDate}</Moment></td>
             <td>{this.props.tradingAccount.Active ? 'Active' : ''}</td>
           </tr>

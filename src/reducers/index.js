@@ -1,13 +1,15 @@
 import { combineReducers } from 'redux';
 import fuelSavings from './fuelSavingsReducer';
 import mockTradingAccounts from './mockTradingAccountReducer';
-import sequelizeTradingAccounts from './sequelizeTradingAccountReducer';
+import tradingAccounts from './tradingAccountReducer';
+import markets from './marketReducer';
 import { routerReducer } from 'react-router-redux';
 
 const rootReducer = combineReducers({
   fuelSavings,
   mockTradingAccounts,
-  sequelizeTradingAccounts,
+  tradingAccounts,
+  markets,
   routing: routerReducer
 });
 
