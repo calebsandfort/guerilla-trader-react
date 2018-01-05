@@ -1,9 +1,8 @@
-import axios from 'axios';
-import * as envProperties from '../constants/envProperties';
+import ServiceBase from './serviceBase';
 
-class TradingAccountService {
+class TradingAccountService extends ServiceBase {
   static getAllTradingAccounts(){
-    return axios.get(`${envProperties.API_BASE_URL}tradingaccounts`);
+    return super.api().get('/tradingaccounts');
   }
 }
 

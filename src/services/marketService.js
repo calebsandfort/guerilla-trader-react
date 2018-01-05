@@ -1,9 +1,14 @@
+import ServiceBase from './serviceBase';
 import axios from 'axios';
-import * as envProperties from '../constants/envProperties';
 
-class MarketService {
+class MarketService extends ServiceBase {
   static getAllMarkets(){
-    return axios.get(`${envProperties.API_BASE_URL}markets`);
+    return super.api().get('/markets');
+  }
+
+  static async getMarketsWithCount(){
+    const [markets, counts] = await Promise.all([super.api().get('/markets'), super.api().get('/markets/count')]);
+    console.log(markets, counts);
   }
 }
 

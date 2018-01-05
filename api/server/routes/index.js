@@ -1,5 +1,6 @@
 const tradingAccountsController = require('../controllers').tradingAccounts;
 const marketsController = require('../controllers').markets;
+const stocksController = require('../controllers').stocks;
 
 module.exports = (app) => {
   app.get('/api', (req, res) => res.status(200).send({
@@ -19,7 +20,9 @@ module.exports = (app) => {
   // );
 
 
+  app.get('/api/markets/count', marketsController.count);
   app.get('/api/markets', marketsController.list);
+  app.get('/api/stocks', stocksController.list);
 
   // For any other request method on todo items, we're going to return "Method Not Allowed"
   // app.all('/api/todos/:todoId/items', (req, res) =>

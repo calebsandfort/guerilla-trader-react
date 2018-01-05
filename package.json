@@ -37,6 +37,7 @@
   "author": "Caleb Sandfort",
   "license": "MIT",
   "dependencies": {
+    "@orange-marmalade/paginate-this": "4.0.0-beta-19",
     "axios": "0.17.1",
     "express": "4.16.2",
     "moment": "2.20.1",
