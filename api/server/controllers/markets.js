@@ -26,18 +26,18 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
-  async resultsAndTotal(req, res){
-    const [resultsResponse, countResponse] = await Promise.all([Market
-      .findAll({
-        order: sequelize.literal('Active DESC')
-      }),
-      Market.count()]);
-
-    res.status(200).send({
-      results: resultsResponse.map(x => Object.assign({}, x.dataValues)),
-      total_count: countResponse
-    });
-  },
+  // async resultsAndTotal(req, res){
+  //   const [resultsResponse, countResponse] = await Promise.all([Market
+  //     .findAll({
+  //       order: sequelize.literal('Active DESC')
+  //     }),
+  //     Market.count()]);
+  //
+  //   res.status(200).send({
+  //     results: resultsResponse.map(x => Object.assign({}, x.dataValues)),
+  //     total_count: countResponse
+  //   });
+  // },
   // retrieve(req, res) {
   //     return Todo
   //         .findById(req.params.todoId, {

@@ -20,7 +20,7 @@ module.exports = (app) => {
   // );
 
 
-  app.get('/api/markets/resultsAndTotal', marketsController.resultsAndTotal);
+  //app.get('/api/markets/resultsAndTotal', marketsController.resultsAndTotal);
   app.get('/api/markets/count', marketsController.count);
   app.get('/api/markets', marketsController.list);
   app.get('/api/stocks', stocksController.list);
