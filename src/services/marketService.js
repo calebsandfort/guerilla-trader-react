@@ -6,9 +6,16 @@ class MarketService extends ServiceBase {
     return super.api().get('/markets');
   }
 
-  static async getMarketsWithCount(){
-    const [markets, counts] = await Promise.all([super.api().get('/markets'), super.api().get('/markets/count')]);
-    console.log(markets, counts);
+  static async getResultsWithTotalCount(){
+    return new Promise((resolve, reject) => {
+      super.api().get('/markets/resultsAndTotal')
+        .then(function(response){
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          reject(error);
+        });
+    });
   }
 }
 

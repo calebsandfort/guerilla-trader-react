@@ -24,8 +24,8 @@ export function updateMarketSuccess(market) {
 export function loadMarkets() {
   return function (dispatch) {
     dispatch(beginAjaxCall());
-    return MarketService.getMarketsWithCount().then(response => {
-      dispatch(loadMarketsSuccess(response[0].data));
+    return MarketService.getResultsWithTotalCount().then(response => {
+      dispatch(loadMarketsSuccess(response.results));
     }).catch(response => {
       dispatch(ajaxCallError(response));
       throw(response);
