@@ -22,15 +22,15 @@ module.exports = (app) => {
   //app.get('/api/markets/resultsAndTotal', marketsController.resultsAndTotal);
 
 
-  app.get('/api/tradingaccounts/resultsAndTotal', tradingAccountsController.resultsAndTotal);
+  // app.get('/api/tradingaccounts/resultsAndTotal', tradingAccountsController.resultsAndTotal);
   app.get('/api/tradingaccounts/count', tradingAccountsController.count);
   app.get('/api/tradingaccounts', tradingAccountsController.list);
 
-  app.get('/api/markets/resultsAndTotal', marketsController.resultsAndTotal);
+  // app.get('/api/markets/resultsAndTotal', marketsController.resultsAndTotal);
   app.get('/api/markets/count', marketsController.count);
   app.get('/api/markets', marketsController.list);
 
-  app.get('/api/stocks/resultsAndTotal', stocksController.resultsAndTotal);
+  // app.get('/api/stocks/resultsAndTotal', stocksController.resultsAndTotal);
   app.get('/api/stocks/count', stocksController.count);
   app.get('/api/stocks', stocksController.list);
 
