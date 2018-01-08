@@ -24,8 +24,8 @@ export function updateTradingAccountSuccess(tradingAccount) {
 export function loadTradingAccounts() {
   return function (dispatch) {
     dispatch(beginAjaxCall());
-    return TradingAccountService.getAllTradingAccounts().then(response => {
-      dispatch(loadTradingAccountsSuccess(response.data));
+    return TradingAccountService.getResultsWithTotalCount().then(response => {
+      dispatch(loadTradingAccountsSuccess(response.results));
     }).catch(response => {
       dispatch(ajaxCallError(response));
       throw(response);

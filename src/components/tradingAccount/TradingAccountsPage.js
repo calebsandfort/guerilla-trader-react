@@ -27,7 +27,7 @@ class TradingAccountsPage extends React.Component {
                    onClick={this.redirectToAddTradingAccountPage}/>
           </div>
         </div>
-        <div className="row">
+        <div className="row" style={{paddingTop: "0"}}>
           <div className="column">
             <TradingAccountList tradingAccounts={this.props.tradingAccounts}/>
           </div>

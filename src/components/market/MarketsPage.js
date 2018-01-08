@@ -36,7 +36,7 @@ class MarketsPage extends React.Component {
                    value="Add Market"
                    className="ui primary button"
                    onClick={this.redirectToAddMarketPage}/>
-            <div className="ui input">
+            <div className="ui input small">
               <input name="contracts" type="number" placeholder="Contracts..."
                      value={this.state.contracts} onChange={this.updateState} />
             </div>
