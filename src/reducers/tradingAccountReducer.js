@@ -5,7 +5,7 @@ export default function tradingAccountReducer(state = initialState.tradingAccoun
   switch (action.type) {
     case types.LOAD_TRADING_ACCOUNTS_SUCCESS:
           return action.tradingAccounts;
-
+    
     case types.CREATE_TRADING_ACCOUNT_SUCCESS:
       return [
         ...state,

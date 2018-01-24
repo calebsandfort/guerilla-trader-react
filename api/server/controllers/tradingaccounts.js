@@ -1,4 +1,8 @@
 const TradingAccount = require('../models').TradingAccount;
+const PerformanceCycle = require('../models').PerformanceCycle;
+const TradingAccountSnapshot = require('../models').TradingAccountSnapshot;
+const Trade = require('../models').Trade;
+const Market = require('../models').Market;
 const sequelize = require('sequelize');
 
 module.exports = {
@@ -12,9 +16,27 @@ module.exports = {
   // },
   list(req, res) {
     return TradingAccount
-      .all()
-      .then(todos => res.status(200).send(todos))
-      .catch(error => res.status(400).send(error));
+      .findAll({
+        include: [{
+          model: PerformanceCycle,
+          as: 'PerformanceCycles',
+        },{
+          model: Trade,
+          as: 'Trades',
+          include: [
+            {
+              model: Market,
+              as: 'Market',
+              attributes: ['Symbol']
+            }
+          ]
+        }],
+      })
+      .then(tradingAccounts => res.status(200).send(tradingAccounts))
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
   },
   count(req, res) {
     return TradingAccount
@@ -36,61 +58,74 @@ module.exports = {
   //     total_count: countResponse
   //   });
   // },
-  // retrieve(req, res) {
-  //     return Todo
-  //         .findById(req.params.todoId, {
-  //             include: [{
-  //                 model: TodoItem,
-  //                 as: 'todoItems',
-  //             }],
-  //         })
-  //         .then(todo => {
-  //             if (!todo) {
-  //                 return res.status(404).send({
-  //                     message: 'Todo Not Found',
-  //                 });
-  //             }
-  //             return res.status(200).send(todo);
-  //         })
-  //         .catch(error => res.status(400).send(error));
-  // },
-  // update(req, res) {
-  //     return Todo
-  //         .findById(req.params.todoId, {
-  //             include: [{
-  //                 model: TodoItem,
-  //                 as: 'todoItems',
-  //             }],
-  //         })
-  //         .then(todo => {
-  //             if (!todo) {
-  //                 return res.status(404).send({
-  //                     message: 'Todo Not Found',
-  //                 });
-  //             }
-  //             return todo
-  //                 .update({
-  //                     title: req.body.title || todo.title,
-  //                 })
-  //                 .then(() => res.status(200).send(todo))  // Send back the updated todo.
-  //                 .catch((error) => res.status(400).send(error));
-  //         })
-  //         .catch((error) => res.status(400).send(error));
-  // },
-  // destroy(req, res) {
-  //     return Todo
-  //         .findById(req.params.todoId)
-  //         .then(todo => {
-  //             if (!todo) {
-  //                 return res.status(400).send({
-  //                     message: 'Todo Not Found',
-  //                 });
-  //             }
-  //             return todo
-  //                 .destroy()
-  //                 .then(() => res.status(204).send())
-  //                 .catch(error => res.status(400).send(error));
-  //         })
-  //         .catch(error => res.status(400).send(error));
-  // }
+  retrieve(req, res) {
+    return TradingAccount
+      .findById(req.params.tradingAccountId,
+        {
+          include: [{
+            model: Trade,
+            as: 'Trades',
+            include: [
+              {
+                model: Market,
+                as: 'Market',
+                attributes: ['Symbol']
+              }
+            ]
+          },{
+            model: PerformanceCycle,
+            as: 'PerformanceCycles',
+          }],
+        })
+      .then(tradingAccount => {
+        if (!tradingAccount) {
+          return res.status(404).send({
+            message: 'Trading Account Not Found',
+          });
+        }
+        return res.status(200).send(tradingAccount);
+      })
+      .catch(error => res.status(400).send(error));
+  },
+  update(req, res) {
+
+    return TradingAccount
+      .findById(req.params.tradingAccountId)
+      .then(tradingAccount => {
+        if (!tradingAccount) {
+          return res.status(404).send({
+            message: 'TradingAccount Not Found',
+          });
+        }
+
+        return tradingAccount
+          .update({
+            Name: req.body.Name || tradingAccount.Name,
+            InitialCapital: req.body.InitialCapital || tradingAccount.InitialCapital,
+            CurrentCapital: req.body.CurrentCapital || tradingAccount.CurrentCapital,
+            Commissions: req.body.Commissions || tradingAccount.Commissions,
+            Active: req.body.Active || tradingAccount.Active,
+            InceptionDate: req.body.InceptionDate || tradingAccount.InceptionDate,
+          })
+          .then(() => res.status(200).send(tradingAccount))  // Send back the updated tradingAccount.
+          .catch((error) => res.status(400).send(error));
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+  destroy(req, res) {
+    return TradingAccount
+      .findById(req.params.tradingAccountId)
+      .then(tradingAccount => {
+        if (!tradingAccount) {
+          return res.status(400).send({
+            message: 'TradingAccount Not Found',
+          });
+        }
+        return tradingAccount
+          .destroy()
+          .then(() => res.status(204).send())
+          .catch(error => res.status(400).send(error));
+      })
+      .catch(error => res.status(400).send(error));
+  }
 };

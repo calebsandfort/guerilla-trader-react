@@ -13,6 +13,15 @@ class TradingAccountService extends ServiceBase {
     });
   }
   
+  static saveTradingAccount(tradingAccount) {
+    if(tradingAccount.Id) {
+      return super.api().put(`/tradingaccounts/${tradingAccount.Id}`, tradingAccount);
+    }
+    else {
+      return super.api().post('/tradingaccounts', tradingAccount);
+    }
+  }
+  
   // static async getResultsWithTotalCount() {
   //   return new Promise((resolve, reject) => {
   //     super.api().get('/tradingaccounts/resultsAndTotal')

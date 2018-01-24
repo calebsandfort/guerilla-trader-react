@@ -29,6 +29,37 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
+  listAndCount(req, res){
+    return new Promise((resolve) => {
+
+      let response = {
+        data: [],
+        total: 0
+      }
+
+      let orderArray = null;
+
+      if(req.query.sort !== undefined && req.query.sort.length){
+        orderArray = req.query.sort.map(x => [x.field, x.dir]);
+      }
+      
+      return Stock
+        .findAll({
+          order: orderArray,
+          offset: (parseInt(req.query.page) - 1) * parseInt(req.query.pageSize),
+          limit: parseInt(req.query.pageSize)
+        })
+        .then(stocks => {
+          response.data = stocks;
+          Stock
+            .count()
+            .then(c => {
+              response.total = c;
+              res.status(200).send(response);
+            });
+        });
+    });
+  },
   // async resultsAndTotal(req, res){
   //   const [resultsResponse, countResponse] = await Promise.all([Stock
   //     .findAll({

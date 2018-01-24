@@ -9,6 +9,8 @@ import {loadMarkets} from './actions/marketActions';
 import Root from './components/Root';
 import './styles/styles.scss'; // Yep, that's right. You can import SASS/CSS files too! Webpack will run the associated loader and plug this into the page.
 import './styles/semantic-ui/semantic.min.css';
+import '../node_modules/toastr/build/toastr.min.css';
+
 require('./favicon.ico'); // Tell webpack to load favicon.ico
 const store = configureStore();
 store.dispatch(loadTradingAccounts());

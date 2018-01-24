@@ -33,14 +33,14 @@ export function loadTradingAccounts() {
   };
 }
 
-// export function saveTradingAccount(tradingAccount) {
-//   return function (dispatch, getState) {
-//     dispatch(beginAjaxCall());
-//     return TradingAccountApi.saveTradingAccount(tradingAccount).then(tradingAccount => {
-//       tradingAccount.id ? dispatch(updateTradingAccountSuccess(tradingAccount)) : dispatch(createTradingAccountSuccess(tradingAccount));
-//     }).catch(error => {
-//       dispatch(ajaxCallError(error));
-//       throw(error);
-//     });
-//   };
-// }
+export function saveTradingAccount(tradingAccount) {
+  return function (dispatch, getState) {
+    dispatch(beginAjaxCall());
+    return TradingAccountService.saveTradingAccount(tradingAccount).then(tradingAccount => {
+      tradingAccount.data.Id ? dispatch(updateTradingAccountSuccess(tradingAccount.data)) : dispatch(createTradingAccountSuccess(tradingAccount.data));
+    }).catch(error => {
+      dispatch(ajaxCallError(error));
+      throw(error);
+    });
+  };
+}

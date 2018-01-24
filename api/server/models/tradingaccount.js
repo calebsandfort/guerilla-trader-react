@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = (sequelize, DataTypes) => {
   const TradingAccount = sequelize.define('TradingAccount', {
     Id: {
@@ -26,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(18, 7),
       allowNull: false,
     },
+    AdjProfitLoss: {
+      type: DataTypes.DECIMAL(18, 7),
+      allowNull: false,
+    },
     Active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -39,11 +45,37 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     InceptionDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
+      get: function() {
+        return moment.utc(this.getDataValue('InceptionDate')).format('YYYY-MM-DD');
+      },
       allowNull: false,
     }
   },{
     timestamps: false,
+    getterMethods: {
+      AllPerformanceCycle() {
+        if(this.PerformanceCycles !== null){
+          const allPerformanceCycle = this.PerformanceCycles.filter(pc => pc.CycleType == 8);
+          if (allPerformanceCycle.length) return allPerformanceCycle[0];
+        }
+
+        return null;
+      }
+    }
   });
+
+  TradingAccount.associate = (models) => {
+    TradingAccount.hasMany(models.PerformanceCycle, {
+      foreignKey: 'TradingAccountId',
+      as: 'PerformanceCycles',
+    });
+
+    TradingAccount.hasMany(models.Trade, {
+      foreignKey: 'TradingAccountId',
+      as: 'Trades',
+    });
+  };
+
   return TradingAccount;
 };
