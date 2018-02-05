@@ -32,6 +32,23 @@ module.exports = (sequelize, DataTypes) => {
     }
   },{
     timestamps: false,
+    getterMethods: {
+      Wave() {
+        return 0.0;
+      },
+      OpenPrice() {
+        return 0.0;
+      },
+      LastPrice() {
+        return 0.0;
+      },
+      Change() {
+        return 0.0;
+      },
+      ChangePercent() {
+        return 0.0;
+      }
+    }
   });
   return Market;
 };

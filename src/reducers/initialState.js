@@ -1,6 +1,10 @@
 export default {
   tradingAccounts: [],
-  markets: [],
+  marketData: {
+    timestamp: new Date(),
+    markets: []
+  },
+  // markets: [],
   activeTradingAccount: {
     Id: 0,
     Name: '',
@@ -11,8 +15,13 @@ export default {
     InceptionDate: '',
     Snapshots: [],
     PerformanceCycles: [],
-    Trades: []
+    Trades: [],
+    AllPerformanceCycle: {
+      R: 0.0,
+      MaxDrawdown: 0.0
+    }
   },
+  currentDate: new Date(),
   fuelSavings: {
     newMpg: '',
     tradeMpg: '',

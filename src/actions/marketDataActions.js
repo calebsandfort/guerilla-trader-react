@@ -2,17 +2,21 @@ import MarketService from '../services/marketService';
 import * as types from '../constants/actionTypes';
 import {beginAjaxCall, ajaxCallError} from './ajaxStatusActions';
 
-export function loadMarketsSuccess(markets) {
-  return {type: types.LOAD_MARKETS_SUCCESS, markets};
+export function loadMarketsSuccess(marketData) {
+  return {type: types.LOAD_MARKETS_SUCCESS, marketData};
 }
 
-export function createMarketSuccess(market) {
-  return {type: types.CREATE_MARKET_SUCCESS, market};
+export function marketDataReceived(marketData) {
+  return {type: types.MARKET_DATA_RECEIVED, marketData};
 }
 
-export function updateMarketSuccess(market) {
-  return {type: types.UPDATE_MARKET_SUCCESS, market};
-}
+// export function createMarketSuccess(market) {
+//   return {type: types.CREATE_MARKET_SUCCESS, market};
+// }
+//
+// export function updateMarketSuccess(market) {
+//   return {type: types.UPDATE_MARKET_SUCCESS, market};
+// }
 //
 // export function updateMarketSuccess(market) {
 //   return {type: types.UPDATE_COURSE_SUCCESS, market};
@@ -25,7 +29,10 @@ export function loadMarkets() {
   return function (dispatch) {
     dispatch(beginAjaxCall());
     return MarketService.getResultsWithTotalCount().then(response => {
-      dispatch(loadMarketsSuccess(response.results));
+      dispatch(loadMarketsSuccess({
+        timestamp: new Date(),
+        markets: response.results
+      }));
     }).catch(response => {
       dispatch(ajaxCallError(response));
       throw(response);

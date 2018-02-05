@@ -32,7 +32,8 @@ export default {
       { from: 'tools/dist-files/stop_server.sh', to: 'stop_server.sh' },
       { from: 'tools/dist-files/package.json', to: 'package.json' },
       { from: 'appspec.yml', to: 'appspec.yml' },
-      { from: 'api', to: 'api' }
+      { from: 'api', to: 'api' },
+      { from: 'socket-server', to: 'socket-server' }
     ]),
     // Hash the files using MD5 so that their names change when the content changes.
     new WebpackMd5Hash(),

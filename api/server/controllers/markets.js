@@ -13,6 +13,9 @@ module.exports = {
   list(req, res) {
     return Market
       .findAll({
+        where: {
+          Active: true
+        },
         order: sequelize.literal('Active DESC')
       })
       .then(markets => res.status(200).send(markets))

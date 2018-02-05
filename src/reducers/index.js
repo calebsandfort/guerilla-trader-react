@@ -3,7 +3,8 @@ import fuelSavings from './fuelSavingsReducer';
 import mockTradingAccounts from './mockTradingAccountReducer';
 import tradingAccounts from './tradingAccountReducer';
 import activeTradingAccount from './activeTradingAccountReducer';
-import markets from './marketReducer';
+import marketData from './marketDataReducer';
+import currentDate from './currentDateReducer';
 import { routerReducer } from 'react-router-redux';
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
   mockTradingAccounts,
   tradingAccounts,
   activeTradingAccount,
-  markets,
+  marketData,
+  currentDate,
   routing: routerReducer
 });
 

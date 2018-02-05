@@ -9,12 +9,22 @@ import ManageTradingAccountPage from './tradingAccount/ManageTradingAccountPage'
 import MarketsPage from './market/MarketsPage';
 import StocksPage from './stocks/StocksPage';
 import DashboardPage from './dashboard/DashboardPage';
+import { subscribeToTimer } from '../socket-interactions/index';import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as currentDateActions from '../actions/currentDateActions';
 
 // This is a class-based component because the current
 // version of hot reloading won't hot reload a stateless
 // component at the top-level.
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    // subscribeToTimer((err, timestamp) => {
+    //   props.actions.updateCurrentDate(timestamp);
+    // });
+  }
+
   render() {
     return (
       <div>
@@ -42,8 +52,19 @@ class App extends React.Component {
   }
 }
 
+function mapStateToProps(state, ownProps) {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(currentDateActions, dispatch)
+  };
+}
+
 App.propTypes = {
   children: PropTypes.element
 };
 
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
 export default App;

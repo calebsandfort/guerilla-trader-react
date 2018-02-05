@@ -3,8 +3,28 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import * as marketActions from '../../actions/marketActions';
-import MarketList from './MarketList';
+import * as marketDataActions from '../../actions/marketDataActions';
+import MarketsGrid from './MarketsGrid';
+
+// <div className="ui grid">
+//   <div className="row">
+//     <div className="column">
+//       <input type="submit"
+//              value="Add Market"
+//              className="ui primary button"
+//              onClick={this.redirectToAddMarketPage}/>
+//       <div className="ui input small">
+//         <input name="contracts" type="number" placeholder="Contracts..." min="0"
+//                value={this.state.contracts} onChange={this.updateState} />
+//       </div>
+//     </div>
+//   </div>
+//   <div className="row" style={{paddingTop: "0"}}>
+//     <div className="column">
+//       <MarketList markets={this.props.markets} contracts={this.state.contracts} />
+//     </div>
+//   </div>
+// </div>
 
 class MarketsPage extends React.Component {
   constructor(props, context) {
@@ -12,10 +32,17 @@ class MarketsPage extends React.Component {
     this.redirectToAddMarketPage = this.redirectToAddMarketPage.bind(this);
 
     this.state = {
-      contracts: 1
+      contracts: 1,
+      showGrid: false
     };
 
     this.updateState = this.updateState.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.marketData.markets.length != nextProps.marketData.markets.length) {
+      this.setState({showGrid: true});
+    }
   }
 
   updateState(event) {
@@ -29,43 +56,27 @@ class MarketsPage extends React.Component {
 
   render() {
     return (
-      <div className="ui grid">
-        <div className="row">
-          <div className="column">
-            <input type="submit"
-                   value="Add Market"
-                   className="ui primary button"
-                   onClick={this.redirectToAddMarketPage}/>
-            <div className="ui input small">
-              <input name="contracts" type="number" placeholder="Contracts..." min="0"
-                     value={this.state.contracts} onChange={this.updateState} />
-            </div>
-          </div>
-        </div>
-        <div className="row" style={{paddingTop: "0"}}>
-          <div className="column">
-            <MarketList markets={this.props.markets} contracts={this.state.contracts} />
-          </div>
-        </div>
+      <div>
+        {this.state.showGrid && <MarketsGrid marketData={this.props.marketData} />}
       </div>
     );
   }
 }
 
-MarketsPage.propTypes = {
-  actions: PropTypes.object.isRequired,
-  markets: PropTypes.array.isRequired
-};
+// MarketsPage.propTypes = {
+//   actions: PropTypes.object.isRequired,
+//   markets: PropTypes.array.isRequired
+// };
 
 function mapStateToProps(state, ownProps) {
   return {
-    markets: state.markets
+    marketData: state.marketData
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(marketActions, dispatch)
+    actions: bindActionCreators(marketDataActions, dispatch)
   };
 }
 

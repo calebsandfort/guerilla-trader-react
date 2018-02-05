@@ -36,3 +36,11 @@
 .k-grid td {
   line-height: 1.25em;
 }
+
+[class*="left floated"] {
+  float: left;
+}
+
+[class*="right floated"] {
+  float: right;
+}
