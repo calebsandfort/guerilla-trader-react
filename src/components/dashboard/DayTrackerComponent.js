@@ -30,7 +30,7 @@ export class DayTrackerComponent extends React.Component {
     this.state = {
       chartOptions: this.buildChartOptions(this.props.dayTracker.rChartItems),
       rClass: SemanticUiColors.GREY.Name
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,7 +47,7 @@ export class DayTrackerComponent extends React.Component {
       height: 200,
       displayKey: "tradeNumber",
       valueKey: "r",
-      strokeColor: "#" + SemanticUiColors.PINK.Hex,
+      strokeColor: "#" + SemanticUiColors.BLUE.Hex,
       xLabel: "Trade #",
       yLabel: "R",
     };
@@ -57,8 +57,8 @@ export class DayTrackerComponent extends React.Component {
     return (
       <div className="ui one column grid">
         <div className="column">
-          <div className="ui raised violet segment">
-            <div className="ui top attached violet label">Day Tracker</div>
+          <div className="ui raised blue segment">
+            <div className="ui top attached blue label">Day Tracker</div>
             <div className="ui grid">
               <div className="sixteen column row" style={{paddingTop: "0"}}>
                 <div className="sixteen wide column">

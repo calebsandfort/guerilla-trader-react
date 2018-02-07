@@ -6,8 +6,8 @@ const MacroDetails = ({tradingAccount}) => {
   return (
     <div className="ui one column grid">
       <div className="column">
-        <div className="ui raised red segment" style={{paddingBottom: "5px"}}>
-          <div className="ui top attached red label">{tradingAccount.Name}</div>
+        <div className="ui raised pink segment" style={{paddingBottom: "5px"}}>
+          <div className="ui top attached pink label">{tradingAccount.Name}</div>
           <div className="ui form" style={{display: "inline-block"}}>
             <div className="fields">
               <div className="inline field">
