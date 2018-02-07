@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import numeral from 'numeral';
-import SimpleLineChart from '../common/charts/SimpleLineChart';
+import SimpleLineChart from '../common/charts/simpleLineChart';
 import * as SemanticUiColors from '../../constants/SemanticUiColors';
 import classNames from 'classnames';
 
