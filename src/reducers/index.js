@@ -5,6 +5,7 @@ import tradingAccounts from './tradingAccountReducer';
 import activeTradingAccount from './activeTradingAccountReducer';
 import marketData from './marketDataReducer';
 import currentDate from './currentDateReducer';
+import dayTracker from './dayTrackerReducer';
 import { routerReducer } from 'react-router-redux';
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   activeTradingAccount,
   marketData,
   currentDate,
+  dayTracker,
   routing: routerReducer
 });
 

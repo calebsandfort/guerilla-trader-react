@@ -37,5 +37,15 @@ export default {
       annual: 0,
       threeYear: 0
     }
+  },
+  dayTracker: {
+    id: 0,
+    riskMultiple: 2.0,
+    winningTrades: 0,
+    losingTrades: 0,
+    totalTrades: 0,
+    r: 0.0,
+    rChartItems: [],
+    maxTrades: 10
   }
 };
