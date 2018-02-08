@@ -40,12 +40,27 @@ export default {
   },
   dayTracker: {
     id: 0,
+    tradeSettings: {
+      tickValue: 5.00,
+      rewardTicks: 8.0,
+      riskTicks: 15.0,
+      roundTripCommissions: 6.88,
+      contracts: 1,
+      get reward(){
+        return this.tickValue * this.rewardTicks;
+      },
+      get risk(){
+        return this.tickValue * this.riskTicks;
+      }
+    },
     riskMultiple: 2.0,
     winningTrades: 0,
     losingTrades: 0,
     totalTrades: 0,
     r: 0.0,
+    pl: 0.0,
     rChartItems: [],
+    plChartItems: [],
     maxTrades: 10
   }
 };

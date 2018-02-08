@@ -19,6 +19,7 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
       });
 
       reconcileR(newState);
+      reconcilePL(newState);
 
       return newState;
 
@@ -30,6 +31,7 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
       });
 
       reconcileR(newState);
+      reconcilePL(newState);
 
       return newState;
 
@@ -56,12 +58,38 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
 }
 
 function reconcileR(dayTracker) {
-  dayTracker.r = dayTracker.losingTrades == 0 ? dayTracker.winningTrades : (dayTracker.winningTrades / (dayTracker.losingTrades * dayTracker.riskMultiple));
-  const newChartItem = {
+  const totalReward = (dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.reward)
+    - (dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.roundTripCommissions);
+
+  const totalRisk = (dayTracker.losingTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.risk)
+    - (dayTracker.losingTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.roundTripCommissions);
+
+  if(totalRisk == 0){
+    dayTracker.r = totalReward / ((dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.reward) / dayTracker.winningTrades);
+  }
+  else{
+    dayTracker.r = totalReward/totalRisk;
+  }
+
+  const newRChartItem = {
     tradeNumber: dayTracker.id.toString(),
     r: dayTracker.r
   };
 
   dayTracker.rChartItems = [...dayTracker.rChartItems];
-  dayTracker.rChartItems.push(newChartItem);
+  dayTracker.rChartItems.push(newRChartItem);
+}
+
+function reconcilePL(dayTracker) {
+  dayTracker.pl = (dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.reward)
+    - (dayTracker.losingTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.risk)
+    - (dayTracker.totalTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.roundTripCommissions);
+
+  const newPlChartItem = {
+    tradeNumber: dayTracker.id.toString(),
+    pl: dayTracker.pl
+  };
+
+  dayTracker.plChartItems = [...dayTracker.plChartItems];
+  dayTracker.plChartItems.push(newPlChartItem);
 }

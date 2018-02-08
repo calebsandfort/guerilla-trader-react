@@ -37,17 +37,10 @@ export class DashboardDetailsWrapper extends React.Component {
                 <MacroDetails tradingAccount={this.props.tradingAccount}/>
               </div>
             </div>
-            <div className="sixteen column row">
-              <div className="ten wide column">
-                Perf Charts
-              </div>
-              <div className="six wide column">
-                <DayTrackerComponent
-                  dayTracker={this.props.dayTracker}
-                  addWin={this.props.addWin}
-                  addLoss={this.props.addLoss} />
-              </div>
-            </div>
+            <DayTrackerComponent
+              dayTracker={this.props.dayTracker}
+              addWin={this.props.addWin}
+              addLoss={this.props.addLoss} />
           </div>
 
         </TabContent>

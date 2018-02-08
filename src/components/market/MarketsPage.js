@@ -33,14 +33,14 @@ class MarketsPage extends React.Component {
 
     this.state = {
       contracts: 1,
-      showGrid: false
+      showGrid: props.marketData.markets.length > 0
     };
 
     this.updateState = this.updateState.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.marketData.markets.length != nextProps.marketData.markets.length) {
+    if (nextProps.marketData.markets.length > 0) {
       this.setState({showGrid: true});
     }
   }

@@ -34,6 +34,14 @@ const MacroDetails = ({tradingAccount}) => {
                 <label>Max DD:</label>
                 <span>{numeral(tradingAccount.AllPerformanceCycle.MaxDrawdown).format('0,0.00%')}</span>
               </div>
+              <div className="inline field">
+                <label>Total Trades:</label>
+                <span>{numeral(tradingAccount.AllPerformanceCycle.TotalTrades).format('0,0')}</span>
+              </div>
+              <div className="inline field">
+                <label>Win %:</label>
+                <span>{numeral(tradingAccount.AllPerformanceCycle.SuccessRate).format('0,0.00%')}</span>
+              </div>
             </div>
           </div>
         </div>
