@@ -20,17 +20,19 @@ module.exports = {
         include: [{
           model: PerformanceCycle,
           as: 'PerformanceCycles',
-        },{
-          model: Trade,
-          as: 'Trades',
-          include: [
-            {
-              model: Market,
-              as: 'Market',
-              attributes: ['Symbol']
-            }
-          ]
-        }],
+        },
+        //   {
+        //   model: Trade,
+        //   as: 'Trades',
+        //   include: [
+        //     {
+        //       model: Market,
+        //       as: 'Market',
+        //       attributes: ['Symbol']
+        //     }
+        //   ]
+        // }
+        ],
       })
       .then(tradingAccounts => res.status(200).send(tradingAccounts))
       .catch(error => {
@@ -62,7 +64,12 @@ module.exports = {
     return TradingAccount
       .findById(req.params.tradingAccountId,
         {
-          include: [{
+          include: [
+            {
+              model: PerformanceCycle,
+              as: 'PerformanceCycles',
+            },
+            {
             model: Trade,
             as: 'Trades',
             include: [
@@ -72,10 +79,8 @@ module.exports = {
                 attributes: ['Symbol']
               }
             ]
-          },{
-            model: PerformanceCycle,
-            as: 'PerformanceCycles',
-          }],
+          }
+          ],
         })
       .then(tradingAccount => {
         if (!tradingAccount) {

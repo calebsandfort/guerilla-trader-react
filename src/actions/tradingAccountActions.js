@@ -13,6 +13,10 @@ export function createTradingAccountSuccess(tradingAccount) {
 export function updateTradingAccountSuccess(tradingAccount) {
   return {type: types.UPDATE_TRADING_ACCOUNT_SUCCESS, tradingAccount};
 }
+
+export function refreshTradingAccountSuccess(tradingAccount) {
+  return {type: types.REFRESH_TRADING_ACCOUNTS_SUCCESS, tradingAccount};
+}
 //
 // export function updateTradingAccountSuccess(tradingAccount) {
 //   return {type: types.UPDATE_COURSE_SUCCESS, tradingAccount};
@@ -38,6 +42,18 @@ export function saveTradingAccount(tradingAccount) {
     dispatch(beginAjaxCall());
     return TradingAccountService.saveTradingAccount(tradingAccount).then(tradingAccount => {
       tradingAccount.data.Id ? dispatch(updateTradingAccountSuccess(tradingAccount.data)) : dispatch(createTradingAccountSuccess(tradingAccount.data));
+    }).catch(error => {
+      dispatch(ajaxCallError(error));
+      throw(error);
+    });
+  };
+}
+
+export function refreshTradingAccount(tradingAccount) {
+  return function (dispatch, getState) {
+    dispatch(beginAjaxCall());
+    return TradingAccountService.getTradingAccount(tradingAccount).then(response => {
+      dispatch(refreshTradingAccountSuccess(response.data));
     }).catch(error => {
       dispatch(ajaxCallError(error));
       throw(error);

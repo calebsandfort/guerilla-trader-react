@@ -30,7 +30,7 @@ class App extends React.Component {
       <div>
         <div className="ui container">
           <div className="ui secondary pointing menu">
-            <div className="header item">Guerilla Trader</div>
+            <div className="header item">Wave Trader</div>
             <NavLink exact to="/" className="item" activeClassName="active">Dashboard</NavLink>
             <NavLink to="/tradingAccounts" className="item" activeClassName="active">Accounts</NavLink>
             <NavLink to="/markets" className="item" activeClassName="active">Markets</NavLink>

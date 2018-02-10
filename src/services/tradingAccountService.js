@@ -12,7 +12,11 @@ class TradingAccountService extends ServiceBase {
       total_count: countResponse.data.count
     });
   }
-  
+
+  static getTradingAccount(tradingAccount) {
+    return super.api().get(`/tradingaccounts/${tradingAccount.Id}`);
+  }
+
   static saveTradingAccount(tradingAccount) {
     if(tradingAccount.Id) {
       return super.api().put(`/tradingaccounts/${tradingAccount.Id}`, tradingAccount);
@@ -21,7 +25,16 @@ class TradingAccountService extends ServiceBase {
       return super.api().post('/tradingaccounts', tradingAccount);
     }
   }
-  
+
+  static purge(){
+    return super.guerillaTraderMvcApi().post('tradingAccount/purge');
+  }
+
+  static reconcile(){
+    return super.guerillaTraderMvcApi().post('tradingAccount/reconcile');
+  }
+
+
   // static async getResultsWithTotalCount() {
   //   return new Promise((resolve, reject) => {
   //     super.api().get('/tradingaccounts/resultsAndTotal')

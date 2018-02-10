@@ -5,7 +5,7 @@ export default function tradingAccountReducer(state = initialState.tradingAccoun
   switch (action.type) {
     case types.LOAD_TRADING_ACCOUNTS_SUCCESS:
           return action.tradingAccounts;
-    
+
     case types.CREATE_TRADING_ACCOUNT_SUCCESS:
       return [
         ...state,
@@ -13,6 +13,7 @@ export default function tradingAccountReducer(state = initialState.tradingAccoun
       ];
 
     case types.UPDATE_TRADING_ACCOUNT_SUCCESS:
+    case types.REFRESH_TRADING_ACCOUNTS_SUCCESS:
       return [
         ...state.filter(tradingAccount => tradingAccount.Id !== action.tradingAccount.Id),
         Object.assign({}, action.tradingAccount)

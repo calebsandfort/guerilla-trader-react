@@ -10,7 +10,7 @@ import NumberInput from '../common/NumberInput';
 //     roundTripCommissions: 6.88
 // }
 
-export class TradeSettings  extends React.Component {
+export class TradeSettings extends React.Component {
   constructor(props, context) {
     super(props, context);
   }

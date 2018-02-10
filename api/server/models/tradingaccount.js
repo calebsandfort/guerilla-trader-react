@@ -1,4 +1,5 @@
 const moment = require('moment');
+const uuidv1 = require('uuid/v1');
 
 module.exports = (sequelize, DataTypes) => {
   const TradingAccount = sequelize.define('TradingAccount', {
@@ -61,6 +62,9 @@ module.exports = (sequelize, DataTypes) => {
         }
 
         return null;
+      },
+      Uuid(){
+        return uuidv1();
       }
     }
   });

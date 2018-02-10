@@ -42,8 +42,8 @@ export default {
     id: 0,
     tradeSettings: {
       tickValue: 5.00,
-      rewardTicks: 8.0,
-      riskTicks: 15.0,
+      rewardTicks: 10.0,
+      riskTicks: 24.0,
       roundTripCommissions: 6.88,
       contracts: 1,
       get reward(){

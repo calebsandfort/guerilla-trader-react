@@ -34,7 +34,14 @@ export class DashboardDetailsWrapper extends React.Component {
           <div className="ui grid">
             <div className="sixteen column row">
               <div className="sixteen wide column">
-                <MacroDetails tradingAccount={this.props.tradingAccount}/>
+                <MacroDetails tradingAccount={this.props.tradingAccount}
+                              setDialogVisibility={this.props.setDialogVisibility}
+                              pasteTradesModalOpen={this.props.pasteTradesModalOpen}
+                              pastedTradesDto={this.props.pastedTradesDto}
+                              updatePastedTrades={this.props.updatePastedTrades}
+                              submitPastedTrades={this.props.submitPastedTrades}
+                              purgeConfirmOpen={this.props.purgeConfirmOpen}
+                              purge={this.props.purge}/>
               </div>
             </div>
             <DayTrackerComponent
@@ -45,7 +52,7 @@ export class DashboardDetailsWrapper extends React.Component {
 
         </TabContent>
         <TabContent index={1} activeIndex={this.state.activeTabIndex}>
-          <TradesGrid trades={this.props.tradingAccount.Trades}/>
+          {this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
         </TabContent>
       </div>
     );

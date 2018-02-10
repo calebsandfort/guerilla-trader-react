@@ -11,6 +11,15 @@ export default function activeTradingAccountReducer(state = initialState.activeT
       }
       return state;
     }
+    case types.REFRESH_TRADING_ACCOUNTS_SUCCESS:
+    {
+      if(state.Id == action.tradingAccount.Id){
+        return Object.assign({}, action.tradingAccount);
+      }
+      else{
+        return state;
+      }
+    }
     default:
       return state;
   }

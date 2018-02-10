@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import numeral from 'numeral';
+import PurgeConfirm from './PurgeConfirm';
+import PasteTradesModal from './PasteTradesModal';
 
-const MacroDetails = ({tradingAccount}) => {
+const MacroDetails = ({tradingAccount, setDialogVisibility,
+  pasteTradesModalOpen, pastedTradesDto, updatePastedTrades, submitPastedTrades,
+  purgeConfirmOpen, purge}) => {
   return (
     <div className="ui one column grid">
       <div className="column">
@@ -41,6 +45,20 @@ const MacroDetails = ({tradingAccount}) => {
               <div className="inline field">
                 <label>Win %:</label>
                 <span>{numeral(tradingAccount.AllPerformanceCycle.SuccessRate).format('0,0.00%')}</span>
+              </div>
+              <div className="inline field" style={{paddingLeft: '2em', paddingRight: '0'}}>
+                <PurgeConfirm
+                  setDialogVisibility={setDialogVisibility}
+                  confirmOpen={purgeConfirmOpen}
+                  purge={purge} />
+              </div>
+              <div className="inline field" style={{paddingLeft: '0'}}>
+                <PasteTradesModal
+                  setDialogVisibility={setDialogVisibility}
+                  modalOpen={pasteTradesModalOpen}
+                  pastedTradesDto={pastedTradesDto}
+                  updatePastedTrades={updatePastedTrades}
+                  submitPastedTrades={submitPastedTrades} />
               </div>
             </div>
           </div>
