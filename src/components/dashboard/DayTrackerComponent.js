@@ -6,23 +6,6 @@ import * as SemanticUiColors from '../../constants/SemanticUiColors';
 import classNames from 'classnames';
 import TradeSettings from './TradeSettings';
 
-// <div className="sixteen column row" style={{paddingTop: "0"}}>
-//   <div className="sixteen wide column">
-//     <div className="ui form" style={{display: "inline-block"}}>
-//       <div className="fields">
-//         <div className="inline field">
-//           <label>Risk Mult.:</label>
-//           <span>{numeral(this.props.dayTracker.riskMultiple).format('0,0.00')}</span>
-//         </div>
-//         <div className="inline field">
-//           <label>R:</label>
-//           <span>{numeral(this.props.dayTracker.r).format('0,0.00')}</span>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// </div>
-
 export class DayTrackerComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -31,11 +14,9 @@ export class DayTrackerComponent extends React.Component {
     this.state = {
       rChartOptions: this.buildChartOptions(this.props.dayTracker.rChartItems, "r", "R"),
       plChartOptions: this.buildChartOptions(this.props.dayTracker.plChartItems, "pl", "P/L"),
-      rClass: SemanticUiColors.GREY.Name,
-      tradeSettings: Object.assign({}, props.dayTracker.tradeSettings)
+      rClass: SemanticUiColors.GREY.Name
     };
 
-    this.updateTradeSettingsState = this.updateTradeSettingsState.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -50,6 +31,7 @@ export class DayTrackerComponent extends React.Component {
         plChartOptions: this.buildChartOptions(nextProps.dayTracker.plChartItems, "pl", "P/L")
       });
     }
+    
   }
 
   buildChartOptions(data, valueKey, yLabel) {
@@ -64,19 +46,6 @@ export class DayTrackerComponent extends React.Component {
     };
   }
 
-  updateTradeSettingsState(event) {
-    const field = event.target.name;
-    let tradeSettings = Object.assign({}, this.state.tradeSettings);
-
-    switch(event.target.type){
-      default:
-        tradeSettings[field] = event.target.value;
-        break;
-    }
-
-    return this.setState({tradeSettings: tradeSettings});
-  }
-
   render() {
     return (
       <div className="row">
@@ -86,7 +55,9 @@ export class DayTrackerComponent extends React.Component {
             <div className="ui grid">
               <div className="row" style={{paddingTop: "0"}}>
                 <div className="column">
-                  <TradeSettings tradeSettings={this.state.tradeSettings} onChange={this.updateTradeSettingsState} />
+                  <TradeSettings activeTradeSettings={this.props.dayTracker.activeTradeSettings}
+                                 updateTradeSettings={this.props.updateTradeSettings}
+                                 saveTradeSettings={this.props.saveTradeSettings} />
                   <div className="ui divider"></div>
                 </div>
               </div>
@@ -115,7 +86,7 @@ export class DayTrackerComponent extends React.Component {
                     'label': true,
                     'large': true,
                     'grey': this.props.dayTracker.totalTrades <= this.props.dayTracker.maxTrades,
-                    'orange': this.props.dayTracker.totalTrades > this.props.dayTracker.maxTrades && this.props.dayTracker.totalTrades < (this.props.dayTracker.maxTrades * 2),
+                    'orange': this.props.dayTracker.totalTrades > this.props.dayTracker.maxTrades && this.props.dayTracker.totalTrades < this.props.dayTracker.maxTrades,
                     'red': this.props.dayTracker.totalTrades >= (this.props.dayTracker.maxTrades * 2)
                   })}>Trades: {this.props.dayTracker.totalTrades}</a>
                   <a className={classNames({

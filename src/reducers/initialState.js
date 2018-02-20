@@ -40,17 +40,22 @@ export default {
   },
   dayTracker: {
     id: 0,
-    tradeSettings: {
-      tickValue: 5.00,
-      rewardTicks: 10.0,
-      riskTicks: 24.0,
-      roundTripCommissions: 6.88,
-      contracts: 1,
-      get reward(){
-        return this.tickValue * this.rewardTicks;
+    allTradeSettings: [],
+    activeTradeSettings: {
+      Uuid: '',
+      TickValue: 5.00,
+      RewardTicks: 10.0,
+      RiskTicks: 24.0,
+      RoundTripCommissions: 6.88,
+      Contracts: 3,
+      get Reward(){
+        return this.TickValue * this.RewardTicks * this.Contracts;
       },
-      get risk(){
-        return this.tickValue * this.riskTicks;
+      get Risk(){
+        return this.TickValue * this.RiskTicks * this.Contracts;
+      },
+      get TotalCommissions(){
+        return this.RoundTripCommissions * this.Contracts;
       }
     },
     riskMultiple: 2.0,

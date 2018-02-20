@@ -29,18 +29,32 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
-  // async resultsAndTotal(req, res){
-  //   const [resultsResponse, countResponse] = await Promise.all([Market
-  //     .findAll({
-  //       order: sequelize.literal('Active DESC')
-  //     }),
-  //     Market.count()]);
-  //
-  //   res.status(200).send({
-  //     results: resultsResponse.map(x => Object.assign({}, x.dataValues)),
-  //     total_count: countResponse
-  //   });
-  // },
+  async resultsAndTotal(req, res){
+    const [resultsResponse, countResponse] = await Promise.all([Market
+      .findAll({
+        where: {
+          Active: true
+        },
+        order: sequelize.literal('Active DESC')
+      }),
+      Market.count()]);
+
+    res.status(200).send({
+      results: resultsResponse.map(x => Object.assign({}, x.dataValues)),
+      total_count: countResponse
+    });
+  },
+  findAndCountAll(req, res){
+    return Market
+      .findAndCountAll({
+        where: {
+          Active: true
+        },
+        order: sequelize.literal('Active DESC')
+      })
+      .then(markets => res.status(200).send(markets))
+      .catch(error => res.status(400).send(error));
+  }
   // retrieve(req, res) {
   //     return Todo
   //         .findById(req.params.todoId, {

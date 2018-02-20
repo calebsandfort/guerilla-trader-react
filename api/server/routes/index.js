@@ -1,4 +1,5 @@
 const tradingAccountsController = require('../controllers').tradingAccounts;
+const tradeSettingsController = require('../controllers').tradeSettings;
 const marketsController = require('../controllers').markets;
 const stocksController = require('../controllers').stocks;
 const smsController = require('../controllers').sms;
@@ -31,11 +32,20 @@ module.exports = (app) => {
   app.put('/api/tradingAccounts/:tradingAccountId', tradingAccountsController.update);
   app.delete('/api/tradingAccounts/:tradingAccountId', tradingAccountsController.destroy);
 
-  // app.get('/api/markets/resultsAndTotal', marketsController.resultsAndTotal);
+  // app.get('/api/tradeSettings/resultsAndTotal', tradeSettingsController.resultsAndTotal);
+  app.get('/api/tradeSettings/count', tradeSettingsController.count);
+  app.get('/api/tradeSettings', tradeSettingsController.list);
+  // app.post('/api/tradeSettings', tradeSettingsController.create);
+  app.get('/api/tradeSettings/:tradeSettingsId', tradeSettingsController.retrieve);
+  app.put('/api/tradeSettings/:tradeSettingsId', tradeSettingsController.update);
+  app.delete('/api/tradeSettings/:tradeSettingsId', tradeSettingsController.destroy);
+
+  app.get('/api/markets/resultsAndTotal', marketsController.resultsAndTotal);
+  app.get('/api/markets/findAndCountAll', marketsController.findAndCountAll);
   app.get('/api/markets/count', marketsController.count);
   app.get('/api/markets', marketsController.list);
 
-  // app.get('/api/stocks/resultsAndTotal', stocksController.resultsAndTotal);
+  app.get('/api/stocks/findAndCountAll', stocksController.findAndCountAll);
   app.get('/api/stocks/listAndCount', stocksController.listAndCount);
   app.get('/api/stocks/count', stocksController.count);
   app.get('/api/stocks', stocksController.list);

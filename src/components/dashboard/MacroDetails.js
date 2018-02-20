@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import numeral from 'numeral';
 import PurgeConfirm from './PurgeConfirm';
+import ReconcileConfirm from './ReconcileConfirm';
 import PasteTradesModal from './PasteTradesModal';
 
 const MacroDetails = ({tradingAccount, setDialogVisibility,
   pasteTradesModalOpen, pastedTradesDto, updatePastedTrades, submitPastedTrades,
-  purgeConfirmOpen, purge}) => {
+  purgeConfirmOpen, purge, reconcileConfirmOpen, reconcile}) => {
   return (
     <div className="ui one column grid">
       <div className="column">
@@ -23,34 +24,44 @@ const MacroDetails = ({tradingAccount, setDialogVisibility,
                 <span>{numeral(tradingAccount.AdjProfitLoss).format('$0,0.00')}</span>
               </div>
               <div className="inline field">
-                <label>Commissions:</label>
+                <label>Comms:</label>
                 <span>{numeral(tradingAccount.Commissions).format('$0,0.00')}</span>
               </div>
               <div className="inline field">
-                <label>Total Return:</label>
+                <label>Return:</label>
                 <span>{numeral(tradingAccount.TotalReturn).format('0,0.00%')}</span>
               </div>
-              <div className="inline field">
+              {tradingAccount.AllPerformanceCycle && <div className="inline field">
                 <label>R:</label>
                 <span>{numeral(tradingAccount.AllPerformanceCycle.R).format('0,0.00')}</span>
-              </div>
-              <div className="inline field">
+              </div>}
+              {tradingAccount.AllPerformanceCycle && <div className="inline field">
                 <label>Max DD:</label>
                 <span>{numeral(tradingAccount.AllPerformanceCycle.MaxDrawdown).format('0,0.00%')}</span>
-              </div>
-              <div className="inline field">
-                <label>Total Trades:</label>
+              </div>}
+              {tradingAccount.AllPerformanceCycle && <div className="inline field">
+                <label>Trades:</label>
                 <span>{numeral(tradingAccount.AllPerformanceCycle.TotalTrades).format('0,0')}</span>
-              </div>
-              <div className="inline field">
+              </div>}
+              {tradingAccount.AllPerformanceCycle && <div className="inline field">
                 <label>Win %:</label>
                 <span>{numeral(tradingAccount.AllPerformanceCycle.SuccessRate).format('0,0.00%')}</span>
-              </div>
+              </div>}
+              {tradingAccount.AllPerformanceCycle && <div className="inline field">
+                <label>PPC:</label>
+                <span>{numeral(tradingAccount.AllPerformanceCycle.PPC).format('$0,0.00')}</span>
+              </div>}
               <div className="inline field" style={{paddingLeft: '2em', paddingRight: '0'}}>
                 <PurgeConfirm
                   setDialogVisibility={setDialogVisibility}
                   confirmOpen={purgeConfirmOpen}
                   purge={purge} />
+              </div>
+              <div className="inline field" style={{paddingLeft: '0', paddingRight: '0'}}>
+                <ReconcileConfirm
+                  setDialogVisibility={setDialogVisibility}
+                  confirmOpen={reconcileConfirmOpen}
+                  reconcile={reconcile} />
               </div>
               <div className="inline field" style={{paddingLeft: '0'}}>
                 <PasteTradesModal

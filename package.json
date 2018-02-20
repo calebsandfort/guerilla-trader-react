@@ -44,6 +44,7 @@
     "axios": "0.17.1",
     "babel-runtime": "6.26.0",
     "classnames": "2.2.5",
+    "enumify": "1.0.4",
     "express": "4.16.2",
     "kendo-ui-core": "2018.1.117",
     "moment": "2.20.1",

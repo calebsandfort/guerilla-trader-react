@@ -1,0 +1,2 @@
+--require mocha-clean
+--reporter nyan

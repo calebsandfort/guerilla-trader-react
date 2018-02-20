@@ -9,7 +9,8 @@ import ManageTradingAccountPage from './tradingAccount/ManageTradingAccountPage'
 import MarketsPage from './market/MarketsPage';
 import StocksPage from './stocks/StocksPage';
 import DashboardPage from './dashboard/DashboardPage';
-import { subscribeToTimer } from '../socket-interactions/index';import {connect} from 'react-redux';
+// import { subscribeToTimer } from '../socket-interactions/index';
+import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as currentDateActions from '../actions/currentDateActions';
 

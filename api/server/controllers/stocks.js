@@ -21,6 +21,46 @@ module.exports = {
       .then(stocks => res.status(200).send(stocks))
       .catch(error => res.status(400).send(error));
   },
+  findAndCountAll(req, res) {
+
+    let orderArray = null;
+
+    if(req.query.sort !== undefined && req.query.sort.length){
+      orderArray = req.query.sort.map(x => [x.field, x.dir]);
+    }
+
+    let sequalizeFilter = null;
+
+    if(req.query.filter){
+      console.log("");
+      console.log("*********");
+      console.log("filter logic here");
+      console.log("*********");
+      console.log("");
+      
+    }
+
+   //  { logic: 'and',
+   //    filters:
+   // [ { field: 'Name', operator: 'startswith', value: '7' },
+   //   { field: 'TotalScore', operator: 'gte', value: '7' } ] }
+
+    return Stock
+      .findAndCountAll({
+        where: sequalizeFilter,
+        order: orderArray,
+        offset: (parseInt(req.query.page) - 1) * parseInt(req.query.pageSize),
+        limit: parseInt(req.query.pageSize)
+      })
+      .then(result => {
+        const response = {
+          data: result.rows,
+          total: result.count
+        }
+        res.status(200).send(response)
+      })
+      .catch(error => res.status(400).send(error));
+  },
   count(req, res) {
     return Stock
       .count()
@@ -42,7 +82,7 @@ module.exports = {
       if(req.query.sort !== undefined && req.query.sort.length){
         orderArray = req.query.sort.map(x => [x.field, x.dir]);
       }
-      
+
       return Stock
         .findAll({
           order: orderArray,

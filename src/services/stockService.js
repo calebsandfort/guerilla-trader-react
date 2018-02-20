@@ -6,10 +6,10 @@ class StockService extends ServiceBase {
   }
 
   static async getResultsWithTotalCount(filters={}){
-    const [stocksResponse, countResponse] = await Promise.all([super.api().get('/stocks', { params: { ...filters } }), super.api().get('/stocks/count')]);
+    const response = await super.api().get('/stocks/findAndCountAll', { params: { ...filters } });
     return Promise.resolve({
-      results: stocksResponse.data,
-      total_count: countResponse.data.count
+      results: response.data.rows,
+      total_count: response.data.count
     });
   }
 

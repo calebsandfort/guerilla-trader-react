@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 
 // Log requests to the console.
-app.use(logger('dev'));
+//app.use(logger('dev'));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());

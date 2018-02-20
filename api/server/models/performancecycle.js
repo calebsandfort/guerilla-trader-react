@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(18,7),
       allowNull: false,
     },
+    PPC: {
+      type: DataTypes.DECIMAL(18,7),
+      allowNull: false,
+    },
   },{
     timestamps: false,
   });

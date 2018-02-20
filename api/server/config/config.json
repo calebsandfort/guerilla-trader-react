@@ -5,7 +5,8 @@
     "database": "GuerillaTrader",
     "host": "traderapp.coodvv92tgpv.us-west-2.rds.amazonaws.com",
     "dialect": "mssql",
-    "port": 1433
+    "port": 1433,
+    "logging": false
   },
   "production": {
     "username": "admin",
@@ -13,6 +14,7 @@
     "database": "GuerillaTrader",
     "host": "traderapp.coodvv92tgpv.us-west-2.rds.amazonaws.com",
     "dialect": "mssql",
-    "port": 1433
+    "port": 1433,
+    "logging": false
   }
 }

@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    CnbcSymbol: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     TickValue: {
       type: DataTypes.DECIMAL(18, 7),
       allowNull: false,

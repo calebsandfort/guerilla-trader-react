@@ -1,4 +1,4 @@
-import {ADD_WIN_TO_DAY_TRACKER, ADD_LOSS_TO_DAY_TRACKER} from '../constants/actionTypes';
+import {ADD_WIN_TO_DAY_TRACKER, ADD_LOSS_TO_DAY_TRACKER, LOAD_TRADE_SETTINGS_SUCCESS} from '../constants/actionTypes';
 import objectAssign from 'object-assign';
 import initialState from './initialState';
 
@@ -35,6 +35,19 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
 
       return newState;
 
+    case LOAD_TRADE_SETTINGS_SUCCESS:
+      if (action.tradeSettings.length > 0) {
+        newState = Object.assign({}, state, {
+          activeTradeSettings: Object.assign({}, action.tradeSettings[0]),
+          allTradeSettings: [...action.tradeSettings]
+        });
+
+        return newState;
+      }
+      else {
+        return state;
+      }
+
     // case SAVE_FUEL_SAVINGS:
     //   // For this example, just simulating a save by changing date modified.
     //   // In a real app using Redux, you might use redux-thunk and handle the async call in fuelSavingsActions.js
@@ -58,17 +71,17 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
 }
 
 function reconcileR(dayTracker) {
-  const totalReward = (dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.reward)
-    - (dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.roundTripCommissions);
+  const totalReward = (dayTracker.winningTrades * dayTracker.activeTradeSettings.Reward)
+    - (dayTracker.winningTrades * dayTracker.activeTradeSettings.TotalCommissions);
 
-  const totalRisk = (dayTracker.losingTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.risk)
-    - (dayTracker.losingTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.roundTripCommissions);
+  const totalRisk = (dayTracker.losingTrades * dayTracker.activeTradeSettings.Risk)
+    - (dayTracker.losingTrades * dayTracker.activeTradeSettings.TotalCommissions);
 
-  if(totalRisk == 0){
-    dayTracker.r = totalReward / ((dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.reward) / dayTracker.winningTrades);
+  if (totalRisk == 0) {
+    dayTracker.r = totalReward / ((dayTracker.winningTrades * dayTracker.activeTradeSettings.Reward) / dayTracker.winningTrades);
   }
-  else{
-    dayTracker.r = totalReward/totalRisk;
+  else {
+    dayTracker.r = totalReward / totalRisk;
   }
 
   const newRChartItem = {
@@ -81,9 +94,9 @@ function reconcileR(dayTracker) {
 }
 
 function reconcilePL(dayTracker) {
-  dayTracker.pl = (dayTracker.winningTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.reward)
-    - (dayTracker.losingTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.risk)
-    - (dayTracker.totalTrades * dayTracker.tradeSettings.contracts * dayTracker.tradeSettings.roundTripCommissions);
+  dayTracker.pl = (dayTracker.winningTrades * dayTracker.activeTradeSettings.Reward)
+    - (dayTracker.losingTrades * dayTracker.activeTradeSettings.Risk)
+    - (dayTracker.totalTrades * dayTracker.activeTradeSettings.TotalCommissions);
 
   const newPlChartItem = {
     tradeNumber: dayTracker.id.toString(),

@@ -6,7 +6,7 @@ import {API_BASE_URL} from '../../constants/envProperties';
 class StocksPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    
+
     this.gridOptions = {
       "columns": [{
         "title": "Name",
@@ -130,7 +130,7 @@ class StocksPage extends React.Component {
       "dataSource": {
         "transport": {
           "read": {
-            "url": `${API_BASE_URL}stocks/listAndCount`,
+            "url": `${API_BASE_URL}stocks/findAndCountAll`,
             "dataType": "json"
           }
         },

@@ -5,10 +5,12 @@ import {bindActionCreators} from 'redux';
 import DashboardDetailsWrapper from './DashboardDetailsWrapper';
 import Moment from 'react-moment';
 import * as dayTrackerActions from '../../actions/dayTrackerActions';
+import * as tradeSettingsActions from '../../actions/tradeSettingsActions';
 import TradingAccountService from '../../services/tradingAccountService';
 import TradeService from '../../services/tradeService';
 import moment from 'moment';
 import {refreshTradingAccount} from '../../actions/tradingAccountActions';
+import toastr from 'toastr';
 
 export class DashboardPage extends React.Component {
   constructor(props, context) {
@@ -21,12 +23,14 @@ export class DashboardPage extends React.Component {
         Trades: '',
         Date: moment().format('YYYY-MM-DD')
       },
-      purgeConfirmOpen: false
+      purgeConfirmOpen: false,
+      reconcileConfirmOpen: false
     };
 
     this.setDialogVisibility = this.setDialogVisibility.bind(this);
     this.updatePastedTrades = this.updatePastedTrades.bind(this);
     this.submitPastedTrades = this.submitPastedTrades.bind(this);
+    this.updateTradeSettings = this.updateTradeSettings.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,7 +39,7 @@ export class DashboardPage extends React.Component {
       this.setState({tradingAccount: Object.assign({}, nextProps.tradingAccount)});
     }
 
-    if (this.props.dayTracker.id != nextProps.dayTracker.id) {
+    if (this.props.dayTracker.id != nextProps.dayTracker.id || this.props.dayTracker.activeTradeSettings.Uuid != nextProps.dayTracker.activeTradeSettings.Uuid) {
       // Necessary to populate form when existing tradingAccount is loaded directly.
       this.setState({dayTracker: Object.assign({}, nextProps.dayTracker)});
     }
@@ -76,6 +80,21 @@ export class DashboardPage extends React.Component {
     });
   }
 
+  reconcile = (event) => {
+    event.preventDefault();
+    TradingAccountService.reconcile().then(response => {
+      if(response.data.success){
+        this.setState({
+          reconcileConfirmOpen: false
+        });
+
+        this.props.onSubmitCompleted(this.props.tradingAccount);
+      }
+    }).catch(response => {
+      throw(response);
+    });
+  }
+
   submitPastedTrades(event) {
     event.preventDefault();
     TradeService.pasteTrades(this.state.pastedTradesDto, this.state.tradingAccount).then(response => {
@@ -101,6 +120,30 @@ export class DashboardPage extends React.Component {
     });
   }
 
+  updateTradeSettings(event) {
+    // const field = event.target.name;
+    // let activeTradeSettings = Object.assign({}, this.state.dayTracker.activeTradeSettings);
+    //
+    // switch(event.target.type){
+    //   default:
+    //     activeTradeSettings[field] = event.target.value;
+    //     break;
+    // }
+    //
+    // this.setState(Object.assign({}, this.state.dayTracker, {activeTradeSettings: activeTradeSettings}));
+  }
+
+  saveTradeSettings(event) {
+    event.preventDefault();
+    this.props.tradeSettingsActions.saveTradeSettings(this.state.dayTracker.activeTradeSettings)
+      .then(() => {
+        toastr.success("Saved trade settings!");
+      })
+      .catch(error => {
+        toastr.error(error);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -117,6 +160,10 @@ export class DashboardPage extends React.Component {
           submitPastedTrades={this.submitPastedTrades}
           purgeConfirmOpen={this.state.purgeConfirmOpen}
           purge={this.purge}
+          reconcileConfirmOpen={this.state.reconcileConfirmOpen}
+          reconcile={this.reconcile}
+          saveTradeSettings={this.saveTradeSettings}
+          updateTradeSettings={this.updateTradeSettings}
         />
       </div>
     );
@@ -134,6 +181,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     dayTrackerActions: bindActionCreators(dayTrackerActions, dispatch),
+    tradeSettingsActions: bindActionCreators(tradeSettingsActions, dispatch),
     onSubmitCompleted: tradingAccount => {
       dispatch(refreshTradingAccount(tradingAccount));
     }
