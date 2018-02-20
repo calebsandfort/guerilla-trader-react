@@ -1,3 +1,5 @@
+const uuidv1 = require('uuid/v1');
+
 module.exports = (sequelize, DataTypes) => {
   const PerformanceCycle = sequelize.define('PerformanceCycle', {
     Id: {
@@ -64,6 +66,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   },{
     timestamps: false,
+    getterMethods: {
+      Uuid(){
+        return uuidv1();
+      }
+    }
   });
 
   PerformanceCycle.associate = (models) => {
