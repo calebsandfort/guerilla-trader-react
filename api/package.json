@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently -k -r -s first \"npm run test:mocha:watch\" \"npm run server\"",
     "server": "nodemon ./bin/www",
-    "test:mocha": "mocha server/controllers/*.test.js",
+    "test:mocha": "mocha server/controllers/*.dev-test.js",
     "test:mocha:watch": "npm run test:mocha -- --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
