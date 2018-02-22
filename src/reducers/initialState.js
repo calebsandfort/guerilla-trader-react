@@ -38,6 +38,20 @@ export default {
       threeYear: 0
     }
   },
+  economicIndicators: [
+    {
+      name: "US 10-YR",
+      symbol: "US10Y",
+      last_time: "",
+      change_pct: 0.0,
+      change: 0.0,
+      last: 0.0,
+      open: 0.0,
+      high: 0.0,
+      low: 0.0,
+      previous_day_closing: 0.0
+    }
+  ],
   dayTracker: {
     id: 0,
     allTradeSettings: [],

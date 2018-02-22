@@ -1,5 +1,7 @@
 const Stock = require('../models').Stock;
 const sequelize = require('sequelize');
+const Op = sequelize.Op;
+const utilities = require('../utilities');
 
 module.exports = {
   // create(req, res) {
@@ -31,13 +33,33 @@ module.exports = {
 
     let sequalizeFilter = null;
 
-    if(req.query.filter){
-      console.log("");
-      console.log("*********");
-      console.log("filter logic here");
-      console.log("*********");
-      console.log("");
-      
+    if(req.query.filter && req.query.filter.filters && req.query.filter.filters.length > 0){
+      let filterArray = [];
+
+      for(let i = 0; i < req.query.filter.filters.length; i++){
+        const kf = req.query.filter.filters[i];
+        const sf = {};
+
+        sf[kf.field] = {
+          [utilities.kendoOpToSequalizeOp(kf.operator)]: utilities.parameterize(kf.operator, kf.value)
+        };
+
+        // console.log("*********");
+        // console.log(sf);
+        // console.log("*********");
+
+        filterArray.push(sf);
+      }
+
+
+      sequalizeFilter = {[Op.and]: filterArray};
+
+      // console.log("");
+      // console.log("*********");
+      // console.log("filter logic here");
+      // console.log(sequalizeFilter);
+      // console.log("*********");
+      // console.log("");
     }
 
    //  { logic: 'and',
