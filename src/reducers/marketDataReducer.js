@@ -4,12 +4,17 @@ import initialState from './initialState';
 export default function marketDataReducer(state = initialState.marketData, action) {
   switch (action.type) {
     case types.LOAD_MARKETS_SUCCESS:
-      return action.marketData;
+      return {
+        timestamp: action.marketData.timestamp,
+        markets: [...action.marketData.markets],
+        economicIndicators: [...state.economicIndicators]
+      };
 
     case types.MARKET_DATA_RECEIVED:
       return {
         timestamp: action.marketData.timestamp,
-        markets: [...state.markets.map(market => calculateWave(market, action.marketData.markets))]
+        markets: [...state.markets.map(market => calculateWave(market, action.marketData.markets))],
+        economicIndicators: [...state.economicIndicators]
       };
 
     // case types.CREATE_MARKET_SUCCESS:

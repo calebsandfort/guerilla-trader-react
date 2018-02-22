@@ -164,6 +164,7 @@ export class DashboardPage extends React.Component {
           reconcile={this.reconcile}
           saveTradeSettings={this.saveTradeSettings}
           updateTradeSettings={this.updateTradeSettings}
+          marketData={this.props.marketData}
         />
       </div>
     );
@@ -174,7 +175,8 @@ function mapStateToProps(state, ownProps) {
   return {
     tradingAccount: state.activeTradingAccount,
     dayTracker: state.dayTracker,
-    currentDate: state.currentDate
+    currentDate: state.currentDate,
+    marketData: state.marketData
   };
 }
 
@@ -190,7 +192,8 @@ function mapDispatchToProps(dispatch) {
 
 DashboardPage.propTypes = {
   tradingAccount: PropTypes.object.isRequired,
-  dayTracker: PropTypes.object.isRequired
+  dayTracker: PropTypes.object.isRequired,
+  marketData: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);

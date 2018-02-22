@@ -6,6 +6,7 @@ import TradesGrid from '../trades/TradesGrid';
 import MacroDetails from './MacroDetails';
 import DayTrackerComponent from './DayTrackerComponent';
 import DailyPerformanceWrapper from './DailyPerformanceWrapper';
+import MarketDataWrapper from './MarketDataWrapper';
 
 export class DashboardDetailsWrapper extends React.Component {
   constructor(props, context) {
@@ -31,6 +32,8 @@ export class DashboardDetailsWrapper extends React.Component {
           <Tab index={1} activeIndex={this.state.activeTabIndex} display={"Daily Perf"}
                updateIndex={this.updateActiveTabIndex}/>
           <Tab index={2} activeIndex={this.state.activeTabIndex} display={"Trades"}
+               updateIndex={this.updateActiveTabIndex}/>
+          <Tab index={3} activeIndex={this.state.activeTabIndex} display={"Market Data"}
                updateIndex={this.updateActiveTabIndex}/>
         </div>
         <TabContent index={0} activeIndex={this.state.activeTabIndex}>
@@ -64,6 +67,9 @@ export class DashboardDetailsWrapper extends React.Component {
         <TabContent index={2} activeIndex={this.state.activeTabIndex}>
           {this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
         </TabContent>
+        <TabContent index={3} activeIndex={this.state.activeTabIndex}>
+          <MarketDataWrapper marketData={this.props.marketData} />
+        </TabContent>
       </div>
     );
   }
@@ -72,6 +78,7 @@ export class DashboardDetailsWrapper extends React.Component {
 DashboardDetailsWrapper.propTypes = {
   tradingAccount: PropTypes.object.isRequired,
   dayTracker: PropTypes.object.isRequired,
+  marketData: PropTypes.object.isRequired,
   addWin: PropTypes.func.isRequired,
   addLoss: PropTypes.func.isRequired
 };

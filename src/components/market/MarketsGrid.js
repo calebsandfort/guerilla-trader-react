@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {Grid} from '@progress/kendo-grid-react-wrapper';
 import Moment from 'react-moment';
 import kendo from '@progress/kendo-ui';
-import $ from 'jquery';
 
 class MarketsGrid extends React.Component {
   constructor(props, context) {

@@ -6,26 +6,6 @@ import {browserHistory} from 'react-router';
 import * as marketDataActions from '../../actions/marketDataActions';
 import MarketsGrid from './MarketsGrid';
 
-// <div className="ui grid">
-//   <div className="row">
-//     <div className="column">
-//       <input type="submit"
-//              value="Add Market"
-//              className="ui primary button"
-//              onClick={this.redirectToAddMarketPage}/>
-//       <div className="ui input small">
-//         <input name="contracts" type="number" placeholder="Contracts..." min="0"
-//                value={this.state.contracts} onChange={this.updateState} />
-//       </div>
-//     </div>
-//   </div>
-//   <div className="row" style={{paddingTop: "0"}}>
-//     <div className="column">
-//       <MarketList markets={this.props.markets} contracts={this.state.contracts} />
-//     </div>
-//   </div>
-// </div>
-
 class MarketsPage extends React.Component {
   constructor(props, context) {
     super(props, context);

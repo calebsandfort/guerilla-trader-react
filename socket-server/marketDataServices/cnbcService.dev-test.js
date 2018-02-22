@@ -18,4 +18,19 @@ describe('CNBC Service', () => {
       parseFloat(response.data.QuickQuoteResult.QuickQuote.last).should.be.above(0.0);
     });
   });
+
+  describe('GetMarketData - Multiple Symbol', () => {
+    it('it should get market data for supplied symbols', async () => {
+      const syms = ["US10Y", "@ND.1"];
+      const response = await cnbc.getMarketData(syms);
+      response.data.should.be.a('object');
+      response.data.QuickQuoteResult.should.be.a('object');
+      response.data.QuickQuoteResult.QuickQuote.should.be.a('array');
+
+      response.data.QuickQuoteResult.QuickQuote.forEach(function (qq, i){
+        qq.symbol.should.be.eql(syms[i]);
+        parseFloat(qq.last).should.be.above(0.0);
+      });
+    });
+  });
 });
