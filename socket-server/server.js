@@ -1,5 +1,6 @@
 const io = require('socket.io')();
-const BarchartService = require('./barchartService');
+const barchart = require('./marketDataServices').barchart;
+
 
 io.on('connection', (client) => {
   client.on('subscribeToTimer', (interval) => {
@@ -21,7 +22,7 @@ io.on('connection', (client) => {
 });
 
 function emitMarketData(client) {
-  BarchartService.getMarketData().then(response => {
+  barchart.getMarketData().then(response => {
     client.emit('marketData',
       {
         timestamp: new Date(),

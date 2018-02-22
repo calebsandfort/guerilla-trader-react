@@ -58,8 +58,8 @@ export default {
     activeTradeSettings: {
       Uuid: '',
       TickValue: 5.00,
-      RewardTicks: 10.0,
-      RiskTicks: 24.0,
+      RewardTicks: 12.0,
+      RiskTicks: 23.0,
       RoundTripCommissions: 6.88,
       Contracts: 3,
       get Reward(){
