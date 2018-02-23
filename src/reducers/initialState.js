@@ -12,6 +12,15 @@ export default {
       new EconomicIndicator(".FTFCNBCA")
     ]
   },
+  streamingData:{
+    markets: [],
+    economicIndicators: [
+      new EconomicIndicator("US10Y"),
+      new EconomicIndicator("=USD"),
+      new EconomicIndicator(".VIX"),
+      new EconomicIndicator(".FTFCNBCA")
+    ]
+  },
   // markets: [],
   activeTradingAccount: {
     Id: 0,

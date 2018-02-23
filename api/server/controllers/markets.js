@@ -13,9 +13,6 @@ module.exports = {
   list(req, res) {
     return Market
       .findAll({
-        where: {
-          Active: true
-        },
         order: sequelize.literal('Active DESC')
       })
       .then(markets => res.status(200).send(markets))
@@ -32,9 +29,6 @@ module.exports = {
   async resultsAndTotal(req, res){
     const [resultsResponse, countResponse] = await Promise.all([Market
       .findAll({
-        where: {
-          Active: true
-        },
         order: sequelize.literal('Active DESC')
       }),
       Market.count()]);
@@ -47,9 +41,6 @@ module.exports = {
   findAndCountAll(req, res){
     return Market
       .findAndCountAll({
-        where: {
-          Active: true
-        },
         order: sequelize.literal('Active DESC')
       })
       .then(markets => res.status(200).send(markets))

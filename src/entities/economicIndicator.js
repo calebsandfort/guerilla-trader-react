@@ -17,8 +17,7 @@ export class EconomicIndicator {
     this.previous_day_closing = 0.0;
   }
 
-  static assign(economicIndicator, quotes){
-
+  static assignFromStreamingQuote(economicIndicator, quotes){
     let quote = quotes.filter(q => q.symbol === economicIndicator.symbol);
     if(quote.length > 0){
       quote = quote[0];

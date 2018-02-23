@@ -30,6 +30,16 @@ io.on('connection', (client) => {
       emitEconomicIndicatorData(client, symbols);
     }, interval);
   });
+
+  client.on('subscribeToStreamingData', (interval, symbols) => {
+    console.log('client is subscribing to streaming data with interval ' + interval + ' and symbols ' + symbols.join());
+
+    emitStreamingData(client, symbols);
+
+    setInterval(() => {
+      emitStreamingData(client, symbols);
+    }, interval);
+  });
 });
 
 function emitMarketData(client) {
@@ -45,6 +55,15 @@ function emitMarketData(client) {
 function emitEconomicIndicatorData(client, symbols) {
   cnbc.getMarketData(symbols).then(response => {
     client.emit('economicIndicatorData',
+      {
+        quotes: response.data.QuickQuoteResult.QuickQuote
+      });
+  });
+}
+
+function emitStreamingData(client, symbols) {
+  cnbc.getMarketData(symbols).then(response => {
+    client.emit('streamingData',
       {
         quotes: response.data.QuickQuoteResult.QuickQuote
       });

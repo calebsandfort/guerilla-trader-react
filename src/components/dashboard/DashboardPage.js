@@ -11,6 +11,7 @@ import TradeService from '../../services/tradeService';
 import moment from 'moment';
 import {refreshTradingAccount} from '../../actions/tradingAccountActions';
 import toastr from 'toastr';
+import { subscribeToStreamingData } from '../../socket-interactions/index';
 
 export class DashboardPage extends React.Component {
   constructor(props, context) {
@@ -165,6 +166,8 @@ export class DashboardPage extends React.Component {
           saveTradeSettings={this.saveTradeSettings}
           updateTradeSettings={this.updateTradeSettings}
           marketData={this.props.marketData}
+          streamingData={this.props.streamingData}
+          openStreamingDataConnection={this.props.openStreamingDataConnection}
         />
       </div>
     );
@@ -176,7 +179,8 @@ function mapStateToProps(state, ownProps) {
     tradingAccount: state.activeTradingAccount,
     dayTracker: state.dayTracker,
     currentDate: state.currentDate,
-    marketData: state.marketData
+    marketData: state.marketData,
+    streamingData: state.streamingData
   };
 }
 
@@ -186,6 +190,11 @@ function mapDispatchToProps(dispatch) {
     tradeSettingsActions: bindActionCreators(tradeSettingsActions, dispatch),
     onSubmitCompleted: tradingAccount => {
       dispatch(refreshTradingAccount(tradingAccount));
+    },
+    openStreamingDataConnection: symbols => {
+      setTimeout(() => {
+        subscribeToStreamingData(dispatch, symbols);
+      }, 500);
     }
   };
 }

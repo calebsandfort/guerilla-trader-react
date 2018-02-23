@@ -6,7 +6,7 @@ import TradesGrid from '../trades/TradesGrid';
 import MacroDetails from './MacroDetails';
 import DayTrackerComponent from './DayTrackerComponent';
 import DailyPerformanceWrapper from './DailyPerformanceWrapper';
-import MarketDataWrapper from './MarketDataWrapper';
+import StreamingDataWrapper from './StreamingDataWrapper';
 
 export class DashboardDetailsWrapper extends React.Component {
   constructor(props, context) {
@@ -62,7 +62,7 @@ export class DashboardDetailsWrapper extends React.Component {
 
         </TabContent>
         <TabContent index={1} activeIndex={this.state.activeTabIndex}>
-          <MarketDataWrapper marketData={this.props.marketData} />
+          <StreamingDataWrapper streamingData={this.props.streamingData} openStreamingDataConnection={this.props.openStreamingDataConnection} />
         </TabContent>
         <TabContent index={2} activeIndex={this.state.activeTabIndex}>
           {this.props.tradingAccount.PerformanceCycles && <DailyPerformanceWrapper performanceCycles={this.props.tradingAccount.PerformanceCycles}/>}
@@ -79,6 +79,7 @@ DashboardDetailsWrapper.propTypes = {
   tradingAccount: PropTypes.object.isRequired,
   dayTracker: PropTypes.object.isRequired,
   marketData: PropTypes.object.isRequired,
+  streamingData: PropTypes.object.isRequired,
   addWin: PropTypes.func.isRequired,
   addLoss: PropTypes.func.isRequired
 };

@@ -22,7 +22,7 @@ export default function marketDataReducer(state = initialState.marketData, actio
       return {
         timestamp: state.timestamp,
         markets: [...state.markets.map(x => Object.assign({}, x))],
-        economicIndicators: [...state.economicIndicators.map(x => EconomicIndicator.assign(x, action.economicIndicatorData.quotes))]
+        economicIndicators: [...state.economicIndicators.map(x => EconomicIndicator.assignFromStreamingQuote(x, action.economicIndicatorData.quotes))]
       };
     // case types.CREATE_MARKET_SUCCESS:
     //   return [

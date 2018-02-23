@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Grid} from '@progress/kendo-grid-react-wrapper';
 import Moment from 'react-moment';
 import kendo from '@progress/kendo-ui';
+import * as SemanticUiColors from '../../constants/SemanticUiColors';
 
 // {
 //   uuid: uuidv1(),
@@ -19,7 +20,7 @@ import kendo from '@progress/kendo-ui';
 // }
 
 
-export class EconomicIndicatorsGrid extends React.Component {
+export class StreamingDataGrid extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.gridOptions = {
@@ -60,6 +61,7 @@ export class EconomicIndicatorsGrid extends React.Component {
         "width": "100px",
         "field": "change",
         "format": "{0:C3}",
+        "template": `<span style="font-weight:bold; color:\\##= change > 0 ? '${SemanticUiColors.GREEN.Hex}' : '${SemanticUiColors.RED.Hex}'#">#:kendo.toString(change, 'C3')#</span>`,
         "encoded": true
       }, {
         "title": "Chg Pct",
@@ -70,6 +72,7 @@ export class EconomicIndicatorsGrid extends React.Component {
         "width": "100px",
         "field": "change_pct",
         "format": "{0:P3}",
+        "template": `<span style="font-weight:bold; color:\\##= change_pct > 0 ? '${SemanticUiColors.GREEN.Hex}' : '${SemanticUiColors.RED.Hex}'#">#:kendo.toString(change_pct, 'P3')#</span>`,
         "encoded": true
       }, {
 
@@ -94,23 +97,23 @@ export class EconomicIndicatorsGrid extends React.Component {
       "filterable": true,
       "toolbar": {},
       "messages": {
-        "noRecords": "No economic indicators available."
+        "noRecords": "No items available."
       }
     };
 
     this.state = {
-      dataSource : this.getDataSource([...this.props.economicIndicators])
+      dataSource : this.getDataSource([...this.props.items])
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.economicIndicators.length == nextProps.economicIndicators.length
-      && this.props.economicIndicators.length > 0) {
-      const inconsistencies = this.props.economicIndicators.filter(p => nextProps.economicIndicators.filter(np => np.uuid != p.uuid).length > 0);
+    if (this.props.items.length == nextProps.items.length
+      && this.props.items.length > 0) {
+      const inconsistencies = this.props.items.filter(p => nextProps.items.filter(np => np.uuid != p.uuid).length > 0);
 
       if(inconsistencies.length) {
         this.setState({
-          dataSource : this.getDataSource([...nextProps.economicIndicators])
+          dataSource : this.getDataSource([...nextProps.items])
         });
       }
     }
@@ -188,8 +191,8 @@ export class EconomicIndicatorsGrid extends React.Component {
   }
 }
 
-EconomicIndicatorsGrid.propTypes = {
-  economicIndicators: PropTypes.array.isRequired
+StreamingDataGrid.propTypes = {
+  items: PropTypes.array.isRequired
 };
 
-export default EconomicIndicatorsGrid;
+export default StreamingDataGrid;
