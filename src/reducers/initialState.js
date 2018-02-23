@@ -1,4 +1,4 @@
-import uuidv1 from 'uuid/v1';
+import {EconomicIndicator} from '../entities';
 
 export default {
   tradingAccounts: [],
@@ -6,19 +6,10 @@ export default {
     timestamp: new Date(),
     markets: [],
     economicIndicators: [
-      {
-        uuid: uuidv1(),
-        name: "US 10-YR",
-        symbol: "US10Y",
-        last_time: "",
-        change_pct: 0.0,
-        change: 0.0,
-        last: 0.0,
-        open: 0.0,
-        high: 0.0,
-        low: 0.0,
-        previous_day_closing: 0.0
-      }
+      new EconomicIndicator("US10Y"),
+      new EconomicIndicator("=USD"),
+      new EconomicIndicator(".VIX"),
+      new EconomicIndicator(".FTFCNBCA")
     ]
   },
   // markets: [],
@@ -39,22 +30,6 @@ export default {
     }
   },
   currentDate: new Date(),
-  fuelSavings: {
-    newMpg: '',
-    tradeMpg: '',
-    newPpg: '',
-    tradePpg: '',
-    milesDriven: '',
-    milesDrivenTimeframe: 'week',
-    displayResults: false,
-    dateModified: null,
-    necessaryDataIsProvidedToCalculateSavings: false,
-    savings: {
-      monthly: 0,
-      annual: 0,
-      threeYear: 0
-    }
-  },
   dayTracker: {
     id: 0,
     allTradeSettings: [],

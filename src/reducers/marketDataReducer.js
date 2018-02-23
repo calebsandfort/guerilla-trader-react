@@ -1,5 +1,6 @@
 import * as types from '../constants/actionTypes';
 import initialState from './initialState';
+import {EconomicIndicator} from '../entities';
 
 export default function marketDataReducer(state = initialState.marketData, action) {
   switch (action.type) {
@@ -7,16 +8,22 @@ export default function marketDataReducer(state = initialState.marketData, actio
       return {
         timestamp: action.marketData.timestamp,
         markets: [...action.marketData.markets],
-        economicIndicators: [...state.economicIndicators]
+        economicIndicators: [...state.economicIndicators.map(x => Object.assign({}, x))]
       };
 
     case types.MARKET_DATA_RECEIVED:
       return {
         timestamp: action.marketData.timestamp,
         markets: [...state.markets.map(market => calculateWave(market, action.marketData.markets))],
-        economicIndicators: [...state.economicIndicators]
+        economicIndicators: [...state.economicIndicators.map(x => Object.assign({}, x))]
       };
 
+    case types.ECONOMIC_INDICATOR_DATA_RECEIVED:
+      return {
+        timestamp: state.timestamp,
+        markets: [...state.markets.map(x => Object.assign({}, x))],
+        economicIndicators: [...state.economicIndicators.map(x => EconomicIndicator.assign(x, action.economicIndicatorData.quotes))]
+      };
     // case types.CREATE_MARKET_SUCCESS:
     //   return [
     //     ...state,
@@ -34,7 +41,7 @@ export default function marketDataReducer(state = initialState.marketData, actio
   }
 }
 
-function calculateWave(originalMarket, barchartMarkets){
+function calculateWave(originalMarket, barchartMarkets) {
   let foundMarket = barchartMarkets.filter(m => m.symbol.startsWith(originalMarket.Symbol));
   if (foundMarket.length) {
     foundMarket = foundMarket[0];

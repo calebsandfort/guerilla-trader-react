@@ -10,6 +10,10 @@ export function marketDataReceived(marketData) {
   return {type: types.MARKET_DATA_RECEIVED, marketData};
 }
 
+export function economicIndicatorDataReceived(economicIndicatorData) {
+  return {type: types.ECONOMIC_INDICATOR_DATA_RECEIVED, economicIndicatorData};
+}
+
 // export function createMarketSuccess(market) {
 //   return {type: types.CREATE_MARKET_SUCCESS, market};
 // }

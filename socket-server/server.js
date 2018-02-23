@@ -1,5 +1,6 @@
 const io = require('socket.io')();
 const barchart = require('./marketDataServices').barchart;
+const cnbc = require('./marketDataServices').cnbc;
 
 
 io.on('connection', (client) => {
@@ -19,6 +20,16 @@ io.on('connection', (client) => {
       emitMarketData(client);
     }, interval);
   });
+
+  client.on('subscribeToEconomicIndicatorData', (interval, symbols) => {
+    console.log('client is subscribing to economic indicator data with interval ' + interval + ' and symbols ' + symbols.join());
+
+    emitEconomicIndicatorData(client, symbols);
+
+    setInterval(() => {
+      emitEconomicIndicatorData(client, symbols);
+    }, interval);
+  });
 });
 
 function emitMarketData(client) {
@@ -27,6 +38,15 @@ function emitMarketData(client) {
       {
         timestamp: new Date(),
         markets: response.data.data
+      });
+  });
+}
+
+function emitEconomicIndicatorData(client, symbols) {
+  cnbc.getMarketData(symbols).then(response => {
+    client.emit('economicIndicatorData',
+      {
+        quotes: response.data.QuickQuoteResult.QuickQuote
       });
   });
 }

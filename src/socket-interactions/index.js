@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
-import {marketDataReceived} from '../actions/marketDataActions';
+import {marketDataReceived, economicIndicatorDataReceived} from '../actions/marketDataActions';
 
 const SOCKET_SERVER_URL = process.env.NODE_ENV === 'production' ? "http://ec2-34-214-87-86.us-west-2.compute.amazonaws.com:3002" : "http://localhost:3002";
 
@@ -18,4 +18,12 @@ function subscribeToMarketData(store) {
   socket.emit('subscribeToMarketData', 600000);
 }
 
-export { subscribeToTimer, subscribeToMarketData };
+function subscribeToEconomicIndicatorData(store) {
+  socket.on('economicIndicatorData', response => {
+    store.dispatch(economicIndicatorDataReceived(response));
+  });
+
+  socket.emit('subscribeToEconomicIndicatorData', 600000, store.getState().marketData.economicIndicators.map(x => x.symbol));
+}
+
+export { subscribeToTimer, subscribeToMarketData, subscribeToEconomicIndicatorData };

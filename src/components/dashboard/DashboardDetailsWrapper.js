@@ -29,11 +29,11 @@ export class DashboardDetailsWrapper extends React.Component {
         <div className="ui tabular secondary pointing menu">
           <Tab index={0} activeIndex={this.state.activeTabIndex} display={"At a Glance"}
                updateIndex={this.updateActiveTabIndex}/>
-          <Tab index={1} activeIndex={this.state.activeTabIndex} display={"Daily Perf"}
+          <Tab index={1} activeIndex={this.state.activeTabIndex} display={"Markets & Indicators"}
                updateIndex={this.updateActiveTabIndex}/>
-          <Tab index={2} activeIndex={this.state.activeTabIndex} display={"Trades"}
+          <Tab index={2} activeIndex={this.state.activeTabIndex} display={"Daily Perf"}
                updateIndex={this.updateActiveTabIndex}/>
-          <Tab index={3} activeIndex={this.state.activeTabIndex} display={"Market Data"}
+          <Tab index={3} activeIndex={this.state.activeTabIndex} display={"Trades"}
                updateIndex={this.updateActiveTabIndex}/>
         </div>
         <TabContent index={0} activeIndex={this.state.activeTabIndex}>
@@ -62,13 +62,13 @@ export class DashboardDetailsWrapper extends React.Component {
 
         </TabContent>
         <TabContent index={1} activeIndex={this.state.activeTabIndex}>
-          {this.props.tradingAccount.PerformanceCycles && <DailyPerformanceWrapper performanceCycles={this.props.tradingAccount.PerformanceCycles}/>}
+          <MarketDataWrapper marketData={this.props.marketData} />
         </TabContent>
         <TabContent index={2} activeIndex={this.state.activeTabIndex}>
-          {this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
+          {this.props.tradingAccount.PerformanceCycles && <DailyPerformanceWrapper performanceCycles={this.props.tradingAccount.PerformanceCycles}/>}
         </TabContent>
         <TabContent index={3} activeIndex={this.state.activeTabIndex}>
-          <MarketDataWrapper marketData={this.props.marketData} />
+          {this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
         </TabContent>
       </div>
     );

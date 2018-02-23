@@ -6,7 +6,6 @@ export class MarketDataWrapper extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    console.log(this.props.marketData.economicIndicators);
   }
 
   render() {

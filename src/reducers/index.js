@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import fuelSavings from './fuelSavingsReducer';
 import mockTradingAccounts from './mockTradingAccountReducer';
 import tradingAccounts from './tradingAccountReducer';
 import tradeSettings from './tradeSettingsReducer';
@@ -10,7 +9,6 @@ import dayTracker from './dayTrackerReducer';
 import { routerReducer } from 'react-router-redux';
 
 const rootReducer = combineReducers({
-  fuelSavings,
   mockTradingAccounts,
   tradingAccounts,
   // tradeSettings,
