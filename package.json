@@ -23,7 +23,7 @@
     "build": "babel-node tools/build.js && npm run open:dist",
     "prebuild-aws": "npm run lint && npm run test && npm run clean-dist",
     "build-aws": "babel-node tools/build.js",
-    "test": "jest && npm run test:mocha",
+    "test": "npm run test:mocha",
     "test:CI": "babel-node tools/testCi.js",
     "test:cover": "npm run test -- --coverage ",
     "test:cover:CI": "npm run test:CI -- --coverage && cat ./coverage/lcov.info | node_modules/coveralls/bin/coveralls.js",
