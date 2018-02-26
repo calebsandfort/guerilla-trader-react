@@ -3,14 +3,14 @@
     {
       "name": "app",
       "script": "./app.js",
-      "out_file": "./logs/app.stdout.log",
-      "error_file": "./logs/app.stderr.log"
+      "out_file": "./logs/app_out.log",
+      "error_file": "./logs/app_error.log"
     },
     {
       "name": "socket-server",
       "script": "./socket-server/server.js",
-      "out_file": "./logs/socket-server.stdout.log",
-      "error_file": "./logs/socket-server.stderr.log"
+      "out_file": "./logs/socket-server_out.log",
+      "error_file": "./logs/socket-server_error.log"
     }
   ]
 }
