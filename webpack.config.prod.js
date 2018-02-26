@@ -30,7 +30,9 @@ export default {
       { from: 'tools/dist-files/app.dist.js', to: 'app.js' },
       { from: 'tools/dist-files/start_server.sh', to: 'start_server.sh' },
       { from: 'tools/dist-files/stop_server.sh', to: 'stop_server.sh' },
+      { from: 'tools/dist-files/install_dependencies.sh', to: 'install_dependencies.sh' },
       { from: 'tools/dist-files/package.json', to: 'package.json' },
+      { from: 'tools/dist-files/apps.json', to: 'apps.json' },
       { from: 'appspec.yml', to: 'appspec.yml' },
       { from: 'api', to: 'api' },
       { from: 'socket-server', to: 'socket-server' }

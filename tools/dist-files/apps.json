@@ -1,0 +1,16 @@
+{
+  "apps": [
+    {
+      "name": "app",
+      "script": "./app.js",
+      "out_file": "./logs/app.stdout.log",
+      "error_file": "./logs/app.stderr.log"
+    },
+    {
+      "name": "socket-server",
+      "script": "./socket-server/server.js",
+      "out_file": "./logs/socket-server.stdout.log",
+      "error_file": "./logs/socket-server.stderr.log"
+    }
+  ]
+}

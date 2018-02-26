@@ -5,6 +5,10 @@ files:
     destination: /home/ec2-user/app
 hooks:
   AfterInstall:
+    - location: install_dependencies.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
     - location: start_server.sh
       timeout: 300
       runas: root
