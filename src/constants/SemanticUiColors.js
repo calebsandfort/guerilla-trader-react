@@ -1,8 +1,8 @@
-export const RED = { Name: 'red', Hex: 'B03060' };
+export const RED = { Name: 'red', Hex: 'f44336' };
 export const ORANGE = { Name: 'orange', Hex: 'FE9A76' };
 export const YELLOW = { Name: 'yellow', Hex: 'FFD700' };
 export const OLIVE = { Name: 'olive', Hex: '32CD32' };
-export const GREEN = { Name: 'green', Hex: '016936' };
+export const GREEN = { Name: 'green', Hex: '4caf50' };
 export const TEAL = { Name: 'teal', Hex: '008080' };
 export const BLUE = { Name: 'blue', Hex: '0E6EB8' };
 export const VIOLET = { Name: 'violet', Hex: 'EE82EE' };

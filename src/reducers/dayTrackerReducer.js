@@ -20,6 +20,7 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
 
       reconcileR(newState);
       reconcilePL(newState);
+      reconcileWinRate(newState);
 
       return newState;
 
@@ -32,6 +33,7 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
 
       reconcileR(newState);
       reconcilePL(newState);
+      reconcileWinRate(newState);
 
       return newState;
 
@@ -105,4 +107,16 @@ function reconcilePL(dayTracker) {
 
   dayTracker.plChartItems = [...dayTracker.plChartItems];
   dayTracker.plChartItems.push(newPlChartItem);
+}
+
+function reconcileWinRate(dayTracker) {
+  dayTracker.winRate = dayTracker.winningTrades / dayTracker.totalTrades;
+
+  const newWinRateChartItem = {
+    tradeNumber: dayTracker.id.toString(),
+    winRate: dayTracker.winRate
+  };
+
+  dayTracker.winRateChartItems = [...dayTracker.winRateChartItems];
+  dayTracker.winRateChartItems.push(newWinRateChartItem);
 }

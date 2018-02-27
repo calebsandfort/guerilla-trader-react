@@ -65,8 +65,10 @@ export default {
     totalTrades: 0,
     r: 0.0,
     pl: 0.0,
+    winRate: 0.0,
     rChartItems: [],
     plChartItems: [],
+    winRateChartItems: [],
     maxTrades: 10
   }
 };

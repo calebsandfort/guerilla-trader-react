@@ -5,6 +5,7 @@ import SimpleLineChart from '../common/charts/simpleLineChart';
 import * as SemanticUiColors from '../../constants/SemanticUiColors';
 import classNames from 'classnames';
 import TradeSettings from './TradeSettings';
+import YayNayButton from '../common/YayNayButton';
 
 export class DayTrackerComponent extends React.Component {
   constructor(props, context) {
@@ -14,6 +15,7 @@ export class DayTrackerComponent extends React.Component {
     this.state = {
       rChartOptions: this.buildChartOptions(this.props.dayTracker.rChartItems, "r", "R"),
       plChartOptions: this.buildChartOptions(this.props.dayTracker.plChartItems, "pl", "P/L"),
+      winRateChartOptions: this.buildChartOptions(this.props.dayTracker.winRateChartItems, "pl", "P/L"),
       rClass: SemanticUiColors.GREY.Name
     };
 
@@ -31,7 +33,12 @@ export class DayTrackerComponent extends React.Component {
         plChartOptions: this.buildChartOptions(nextProps.dayTracker.plChartItems, "pl", "P/L")
       });
     }
-    
+
+    if (this.props.dayTracker.winRateChartItems.length != nextProps.dayTracker.winRateChartItems.length) {
+      this.setState({
+        winRateChartOptions: this.buildChartOptions(nextProps.dayTracker.winRateChartItems, "winRate", "W%")
+      });
+    }
   }
 
   buildChartOptions(data, valueKey, yLabel) {
@@ -96,7 +103,7 @@ export class DayTrackerComponent extends React.Component {
                     'grey': this.props.dayTracker.id == 0,
                     'green': this.props.dayTracker.id > 0 && this.props.dayTracker.pl > 0,
                     'red': this.props.dayTracker.id > 0 && this.props.dayTracker.pl < 0
-                  })}>P/L: {numeral(this.props.dayTracker.pl).format('$0,0.00')}</a>
+                  })}>P/L: {numeral(this.props.dayTracker.pl).format('$0,0')}</a>
                   <a className={classNames({
                     'ui': true,
                     'label': true,
@@ -105,13 +112,27 @@ export class DayTrackerComponent extends React.Component {
                     'green': this.props.dayTracker.id > 0 && this.props.dayTracker.r >= 1.0,
                     'red': this.props.dayTracker.id > 0 && this.props.dayTracker.r < 1.0
                   })}>R: {numeral(this.props.dayTracker.r).format('0,0.00')}</a>
+                  <a className={classNames({
+                    'ui': true,
+                    'label': true,
+                    'large': true,
+                    'grey': this.props.dayTracker.id == 0,
+                    'green': this.props.dayTracker.id > 0 && this.props.dayTracker.winRate >= .75,
+                    'red': this.props.dayTracker.id > 0 && this.props.dayTracker.winRate < .75
+                  })}>W: {numeral(this.props.dayTracker.winRate).format('%0,0')}</a>
                 </div>
                 <div className="column" style={{textAlign: "center"}}>
-                  Slippage
+                  <YayNayButton yay={true} />
+                  <YayNayButton yay={true} />
+                  <YayNayButton yay={true} />
                 </div>
               </div>
-
-              <div className="two column row" style={{paddingTop: "0"}}>
+              <div className="row" style={{paddingTop: "0"}}>
+                <div className="column">
+                  <div className="ui divider"></div>
+                </div>
+              </div>
+              <div className="three column row" style={{paddingTop: "0"}}>
                 {this.props.dayTracker.rChartItems.length > 0 &&
                 <div className="column">
                   <SimpleLineChart {...this.state.rChartOptions} />
@@ -119,6 +140,10 @@ export class DayTrackerComponent extends React.Component {
                 {this.props.dayTracker.plChartItems.length > 0 &&
                 <div className="column">
                   <SimpleLineChart {...this.state.plChartOptions} />
+                </div>}
+                {this.props.dayTracker.winRateChartItems.length > 0 &&
+                <div className="column">
+                  <SimpleLineChart {...this.state.winRateChartOptions} />
                 </div>}
               </div>
             </div>
