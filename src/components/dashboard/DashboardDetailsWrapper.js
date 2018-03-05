@@ -27,11 +27,11 @@ export class DashboardDetailsWrapper extends React.Component {
     return (
       <div>
         <div className="ui tabular secondary pointing menu">
-          <Tab index={0} activeIndex={this.state.activeTabIndex} display={"At a Glance"}
+          <Tab index={0} activeIndex={this.state.activeTabIndex} display={"Hub"}
                updateIndex={this.updateActiveTabIndex}/>
           <Tab index={1} activeIndex={this.state.activeTabIndex} display={"Markets & Indicators"}
                updateIndex={this.updateActiveTabIndex}/>
-          <Tab index={2} activeIndex={this.state.activeTabIndex} display={"Daily Perf"}
+          <Tab index={2} activeIndex={this.state.activeTabIndex} display={"Performance"}
                updateIndex={this.updateActiveTabIndex}/>
           <Tab index={3} activeIndex={this.state.activeTabIndex} display={"Trades"}
                updateIndex={this.updateActiveTabIndex}/>
@@ -57,7 +57,10 @@ export class DashboardDetailsWrapper extends React.Component {
               addWin={this.props.addWin}
               addLoss={this.props.addLoss}
               saveTradeSettings={this.props.saveTradeSettings}
-              updateTradeSettings={this.props.updateTradeSettings} />
+              updateTradeSettings={this.props.updateTradeSettings}
+              quickTrade={this.props.quickTrade}
+              updateQuickTrade={this.props.updateQuickTrade}
+              recordQuickTrade={this.props.recordQuickTrade} />
           </div>
 
         </TabContent>
@@ -65,10 +68,10 @@ export class DashboardDetailsWrapper extends React.Component {
           <StreamingDataWrapper streamingData={this.props.streamingData} openStreamingDataConnection={this.props.openStreamingDataConnection} />
         </TabContent>
         <TabContent index={2} activeIndex={this.state.activeTabIndex}>
-          {this.props.tradingAccount.PerformanceCycles && <DailyPerformanceWrapper performanceCycles={this.props.tradingAccount.PerformanceCycles}/>}
+          {this.props.tradingAccount.PerformanceCycles.length > 0 && <DailyPerformanceWrapper performanceCycles={this.props.tradingAccount.PerformanceCycles} dailyPerformanceState={this.props.dailyPerformanceState} updateDailyPerformanceState={this.props.updateDailyPerformanceState}/>}
         </TabContent>
         <TabContent index={3} activeIndex={this.state.activeTabIndex}>
-          {this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
+          {false && this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
         </TabContent>
       </div>
     );

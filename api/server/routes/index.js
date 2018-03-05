@@ -3,6 +3,7 @@ const tradeSettingsController = require('../controllers').tradeSettings;
 const marketsController = require('../controllers').markets;
 const stocksController = require('../controllers').stocks;
 const smsController = require('../controllers').sms;
+const tradesController = require('../controllers').trades;
 
 module.exports = (app) => {
   app.get('/api', (req, res) => res.status(200).send({
@@ -49,6 +50,13 @@ module.exports = (app) => {
   app.get('/api/stocks/listAndCount', stocksController.listAndCount);
   app.get('/api/stocks/count', stocksController.count);
   app.get('/api/stocks', stocksController.list);
+
+  app.get('/api/trades/findAndCountAll', tradesController.findAndCountAll);
+  app.get('/api/trades/listAndCount', tradesController.listAndCount);
+  app.get('/api/trades/count', tradesController.count);
+  app.get('/api/trades', tradesController.list);
+  app.post('/api/trades', tradesController.create);
+  // app.put('/api/trades/:tradingAccountId', tradesController.update);
 
 
   app.post('/sms/receive', smsController.receive);

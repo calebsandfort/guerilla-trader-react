@@ -6,12 +6,14 @@ import DashboardDetailsWrapper from './DashboardDetailsWrapper';
 import Moment from 'react-moment';
 import * as dayTrackerActions from '../../actions/dayTrackerActions';
 import * as tradeSettingsActions from '../../actions/tradeSettingsActions';
+import * as tradeActions from '../../actions/tradeActions';
 import TradingAccountService from '../../services/tradingAccountService';
 import TradeService from '../../services/tradeService';
 import moment from 'moment';
 import {refreshTradingAccount} from '../../actions/tradingAccountActions';
 import toastr from 'toastr';
 import { subscribeToStreamingData } from '../../socket-interactions/index';
+import {PerformanceCycleTypes, TradeTypes} from 'wave-trader-enums';
 
 export class DashboardPage extends React.Component {
   constructor(props, context) {
@@ -25,13 +27,20 @@ export class DashboardPage extends React.Component {
         Date: moment().format('YYYY-MM-DD')
       },
       purgeConfirmOpen: false,
-      reconcileConfirmOpen: false
+      reconcileConfirmOpen: false,
+      dailyPerformance: {
+        performanceCycleType: PerformanceCycleTypes.Day.ordinal
+      },
+      quickTrade: this.props.dayTracker.quickTrade
     };
 
     this.setDialogVisibility = this.setDialogVisibility.bind(this);
     this.updatePastedTrades = this.updatePastedTrades.bind(this);
     this.submitPastedTrades = this.submitPastedTrades.bind(this);
     this.updateTradeSettings = this.updateTradeSettings.bind(this);
+    this.updateDailyPerformanceState = this.updateDailyPerformanceState.bind(this);
+    this.updateQuickTrade = this.updateQuickTrade.bind(this);
+    this.recordQuickTrade = this.recordQuickTrade.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,6 +53,10 @@ export class DashboardPage extends React.Component {
       // Necessary to populate form when existing tradingAccount is loaded directly.
       this.setState({dayTracker: Object.assign({}, nextProps.dayTracker)});
     }
+
+    if(this.props.dayTracker.quickTrade.Last == 0 && nextProps.dayTracker.quickTrade.Last > 0){
+      this.setState({quickTrade: Object.assign({}, nextProps.dayTracker.quickTrade)});
+    }
   }
 
   setDialogVisibility(name, visible){
@@ -51,6 +64,14 @@ export class DashboardPage extends React.Component {
     let newState = {};
     newState[fieldName] = visible;
     this.setState(newState);
+  }
+
+  updateDailyPerformanceState(event, data){
+    let newState = {};
+    newState[data.name] = data.value;
+    this.setState({
+      dailyPerformance: Object.assign({}, this.state.dailyPerformance, newState)
+    });
   }
 
   updatePastedTrades(event) {
@@ -83,6 +104,10 @@ export class DashboardPage extends React.Component {
 
   reconcile = (event) => {
     event.preventDefault();
+    this.reconcileTwo();
+  }
+
+  reconcileTwo = () => {
     TradingAccountService.reconcile().then(response => {
       if(response.data.success){
         this.setState({
@@ -134,6 +159,70 @@ export class DashboardPage extends React.Component {
     // this.setState(Object.assign({}, this.state.dayTracker, {activeTradeSettings: activeTradeSettings}));
   }
 
+  updateQuickTrade(updates) {
+    const field = event.target.name;
+    let quickTrade = Object.assign({}, this.state.quickTrade);
+
+    for(let i = 0; i < updates.length; i++) {
+      quickTrade[updates[i].name] = updates[i].value;
+    }
+
+    this.setState({quickTrade: quickTrade});
+  }
+
+  recordQuickTrade(win){
+    let quickTrade = Object.assign(this.state.quickTrade);
+
+    const tradeTicks = win ? quickTrade.RewardTicks : quickTrade.RiskTicks;
+
+    let newTrade = {
+      TradingAccountId: quickTrade.TradingAccountId,
+      TradeType: quickTrade.TradeType,
+      Trigger: quickTrade.Trigger,
+      Trend: quickTrade.Trend,
+      Size: quickTrade.Size,
+      Volatile: quickTrade.Volatile,
+      Commissions: quickTrade.RoundTripCommissions * quickTrade.Size,
+      TickRange: quickTrade.TickRange,
+      EntryDate: quickTrade.EntryDate,
+      EntryPrice: quickTrade.EntryPrice,
+      ExitDate: moment().format("M/D/YYYY h:mm:ss a"),
+      MarketId: quickTrade.Market.Id
+    };
+
+    if(win && newTrade.TradeType == TradeTypes.Long.ordinal){
+      newTrade.ExitPrice = newTrade.EntryPrice + (quickTrade.Market.TickSize * tradeTicks);
+    }
+    else if(win && newTrade.TradeType == TradeTypes.Short.ordinal){
+      newTrade.ExitPrice = newTrade.EntryPrice - (quickTrade.Market.TickSize * tradeTicks);
+    }
+    else if(!win && newTrade.TradeType == TradeTypes.Long.ordinal){
+      newTrade.ExitPrice = newTrade.EntryPrice - (quickTrade.Market.TickSize * tradeTicks);
+    }
+    else if(!win && newTrade.TradeType == TradeTypes.Short.ordinal){
+      newTrade.ExitPrice = newTrade.EntryPrice + (quickTrade.Market.TickSize * tradeTicks);
+    }
+
+    newTrade.ProfitLoss = quickTrade.Market.TickValue * tradeTicks * newTrade.Size;
+    if(!win) newTrade.ProfitLoss *= -1;
+
+    newTrade.AdjProfitLoss = newTrade.ProfitLoss - newTrade.Commissions;
+    newTrade.ProfitLossPerContract = newTrade.AdjProfitLoss / newTrade.Size;
+
+    this.props.tradeActions.saveTrade(newTrade)
+      .then(() => {
+        this.reconcileTwo();
+      })
+      .catch(error => {
+        toastr.error(error);
+      });
+
+    this.updateQuickTrade([{
+      name: "EntryDate",
+      value: ''
+    }]);
+  }
+
   saveTradeSettings(event) {
     event.preventDefault();
     this.props.tradeSettingsActions.saveTradeSettings(this.state.dayTracker.activeTradeSettings)
@@ -168,6 +257,11 @@ export class DashboardPage extends React.Component {
           marketData={this.props.marketData}
           streamingData={this.props.streamingData}
           openStreamingDataConnection={this.props.openStreamingDataConnection}
+          dailyPerformanceState={this.state.dailyPerformance}
+          updateDailyPerformanceState={this.updateDailyPerformanceState}
+          quickTrade={this.state.quickTrade}
+          updateQuickTrade={this.updateQuickTrade}
+          recordQuickTrade={this.recordQuickTrade}
         />
       </div>
     );
@@ -187,6 +281,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     dayTrackerActions: bindActionCreators(dayTrackerActions, dispatch),
+    tradeActions: bindActionCreators(tradeActions, dispatch),
     tradeSettingsActions: bindActionCreators(tradeSettingsActions, dispatch),
     onSubmitCompleted: tradingAccount => {
       dispatch(refreshTradingAccount(tradingAccount));

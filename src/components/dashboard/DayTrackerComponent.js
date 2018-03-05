@@ -5,13 +5,13 @@ import SimpleLineChart from '../common/charts/simpleLineChart';
 import * as SemanticUiColors from '../../constants/SemanticUiColors';
 import classNames from 'classnames';
 import TradeSettings from './TradeSettings';
+import QuickTradeEditor from './QuickTradeEditor';
 import YayNayButton from '../common/YayNayButton';
 
 export class DayTrackerComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    //data, height, displayKey, valueKey, strokeColor
     this.state = {
       rChartOptions: this.buildChartOptions(this.props.dayTracker.rChartItems, "r", "R"),
       plChartOptions: this.buildChartOptions(this.props.dayTracker.plChartItems, "pl", "P/L"),
@@ -47,7 +47,7 @@ export class DayTrackerComponent extends React.Component {
       height: 200,
       displayKey: "tradeNumber",
       valueKey: valueKey,
-      strokeColor: "#" + SemanticUiColors.BLUE.Hex,
+      color: SemanticUiColors.BLUE,
       xLabel: "Trade #",
       yLabel: yLabel,
     };
@@ -62,14 +62,23 @@ export class DayTrackerComponent extends React.Component {
             <div className="ui grid">
               <div className="row" style={{paddingTop: "0"}}>
                 <div className="column">
-                  <TradeSettings activeTradeSettings={this.props.dayTracker.activeTradeSettings}
-                                 updateTradeSettings={this.props.updateTradeSettings}
-                                 saveTradeSettings={this.props.saveTradeSettings} />
+                  <QuickTradeEditor
+                    quickTrade={this.props.quickTrade}
+                    updateQuickTrade={this.props.updateQuickTrade}
+                    recordQuickTrade={this.props.recordQuickTrade}/>
                   <div className="ui divider"></div>
                 </div>
               </div>
-              <div className="three column row" style={{paddingTop: "0"}}>
-                <div className="column" style={{textAlign: "center"}}>
+              {false && <div className="row" style={{paddingTop: "0"}}>
+                <div className="column">
+                  <TradeSettings activeTradeSettings={this.props.dayTracker.activeTradeSettings}
+                                 updateTradeSettings={this.props.updateTradeSettings}
+                                 saveTradeSettings={this.props.saveTradeSettings}/>
+                  <div className="ui divider"></div>
+                </div>
+              </div>}
+              <div className="one column row" style={{paddingTop: "0"}}>
+                {false && <div className="column" style={{textAlign: "center"}}>
                   <div className="ui left labeled button">
                     <a className="ui basic green label">
                       {this.props.dayTracker.winningTrades}
@@ -86,7 +95,7 @@ export class DayTrackerComponent extends React.Component {
                       <i className="plus icon"></i> Ls
                     </div>
                   </div>
-                </div>
+                </div>}
                 <div className="column" style={{textAlign: "center"}}>
                   <a className={classNames({
                     'ui': true,
@@ -121,11 +130,11 @@ export class DayTrackerComponent extends React.Component {
                     'red': this.props.dayTracker.id > 0 && this.props.dayTracker.winRate < .75
                   })}>W: {numeral(this.props.dayTracker.winRate).format('%0,0')}</a>
                 </div>
-                <div className="column" style={{textAlign: "center"}}>
-                  <YayNayButton yay={true} />
-                  <YayNayButton yay={true} />
-                  <YayNayButton yay={true} />
-                </div>
+                {false && <div className="column" style={{textAlign: "center"}}>
+                  <YayNayButton yay={true}/>
+                  <YayNayButton yay={true}/>
+                  <YayNayButton yay={true}/>
+                </div>}
               </div>
               <div className="row" style={{paddingTop: "0"}}>
                 <div className="column">

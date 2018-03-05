@@ -1,5 +1,5 @@
 export const RED = { Name: 'red', Hex: 'f44336' };
-export const ORANGE = { Name: 'orange', Hex: 'FE9A76' };
+export const ORANGE = { Name: 'orange', Hex: 'f2711c' };
 export const YELLOW = { Name: 'yellow', Hex: 'FFD700' };
 export const OLIVE = { Name: 'olive', Hex: '32CD32' };
 export const GREEN = { Name: 'green', Hex: '4caf50' };

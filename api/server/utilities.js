@@ -12,6 +12,9 @@ module.exports = {
       case "gte":
         sequalizeOp = Op.gte;
         break;
+      case "eq":
+        sequalizeOp = Op.eq;
+        break;
     }
 
     return sequalizeOp;

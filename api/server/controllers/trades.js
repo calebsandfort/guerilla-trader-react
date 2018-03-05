@@ -1,30 +1,55 @@
-const Stock = require('../models').Stock;
+const Trade = require('../models').Trade;
+const Market = require('../models').Market;
 const sequelize = require('sequelize');
 const Op = sequelize.Op;
 const utilities = require('../utilities');
 
 module.exports = {
-  // create(req, res) {
-  //     return Todo
-  //         .create({
-  //             title: req.body.title,
-  //         })
-  //         .then(todo => res.status(201).send(todo))
-  //         .catch(error => res.status(400).send(error));
-  // },
+  create(req, res) {
+      return Trade
+          .create({
+            TradingAccountId: req.body.TradingAccountId,
+            TradeType: req.body.TradeType,
+            Trigger: req.body.Trigger,
+            Trend: req.body.Trend,
+            Size: req.body.Size,
+            Volatile: req.body.Volatile,
+            AdjProfitLoss: req.body.AdjProfitLoss,
+            ProfitLoss: req.body.ProfitLoss,
+            ProfitLossPerContract: req.body.ProfitLossPerContract,
+            Commissions: req.body.Commissions,
+            TickRange: req.body.TickRange,
+            EntryDate: req.body.EntryDate,
+            EntryPrice: req.body.EntryPrice,
+            ExitDate: req.body.ExitDate,
+            ExitPrice: req.body.ExitPrice,
+            MarketId: req.body.MarketId,
+          })
+          .then(trade => res.status(201).send(trade))
+          .catch(error => {
+            console.log(error);
+            res.status(400).send(error)
+          });
+  },
   list(req, res) {
     console.log(req.query);
-    return Stock
+    return Trade
       .findAll({
-        order: sequelize.literal('Name ASC'),
+        order: sequelize.literal('EntryDate DESC'),
         offset: (parseInt(req.query.page) - 1) * parseInt(req.query.pageSize),
-        limit: parseInt(req.query.pageSize)
+        limit: parseInt(req.query.pageSize),
+        include: [
+          {
+            model: Market,
+            as: 'Market',
+            attributes: ['Symbol']
+          }
+        ]
       })
-      .then(stocks => res.status(200).send(stocks))
+      .then(trades => res.status(200).send(trades))
       .catch(error => res.status(400).send(error));
   },
   findAndCountAll(req, res) {
-
     let orderArray = null;
 
     if(req.query.sort !== undefined && req.query.sort.length){
@@ -43,20 +68,26 @@ module.exports = {
         sf[kf.field] = {
           [utilities.kendoOpToSequalizeOp(kf.operator)]: utilities.parameterize(kf.operator, kf.value)
         };
-        
+
         filterArray.push(sf);
       }
-
 
       sequalizeFilter = {[Op.and]: filterArray};
     }
 
-    return Stock
+    return Trade
       .findAndCountAll({
         where: sequalizeFilter,
         order: orderArray,
         offset: (parseInt(req.query.page) - 1) * parseInt(req.query.pageSize),
-        limit: parseInt(req.query.pageSize)
+        limit: parseInt(req.query.pageSize),
+        include: [
+          {
+            model: Market,
+            as: 'Market',
+            attributes: ['Symbol']
+          }
+        ]
       })
       .then(result => {
         const response = {
@@ -65,10 +96,13 @@ module.exports = {
         }
         res.status(200).send(response)
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
   },
   count(req, res) {
-    return Stock
+    return Trade
       .count()
       .then(c => {
         res.status(200).send({count: c});
@@ -89,15 +123,22 @@ module.exports = {
         orderArray = req.query.sort.map(x => [x.field, x.dir]);
       }
 
-      return Stock
+      return Trade
         .findAll({
           order: orderArray,
           offset: (parseInt(req.query.page) - 1) * parseInt(req.query.pageSize),
-          limit: parseInt(req.query.pageSize)
+          limit: parseInt(req.query.pageSize),
+          include: [
+            {
+              model: Market,
+              as: 'Market',
+              attributes: ['Symbol']
+            }
+          ]
         })
-        .then(stocks => {
-          response.data = stocks;
-          Stock
+        .then(trades => {
+          response.data = trades;
+          Trade
             .count()
             .then(c => {
               response.total = c;
@@ -107,11 +148,11 @@ module.exports = {
     });
   },
   // async resultsAndTotal(req, res){
-  //   const [resultsResponse, countResponse] = await Promise.all([Stock
+  //   const [resultsResponse, countResponse] = await Promise.all([Trade
   //     .findAll({
   //       order: sequelize.literal('Active DESC')
   //     }),
-  //     Stock.count()]);
+  //     Trade.count()]);
   //
   //   res.status(200).send({
   //     results: resultsResponse.map(x => Object.assign({}, x.dataValues)),

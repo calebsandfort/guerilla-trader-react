@@ -1,6 +1,16 @@
-import {ADD_WIN_TO_DAY_TRACKER, ADD_LOSS_TO_DAY_TRACKER, LOAD_TRADE_SETTINGS_SUCCESS} from '../constants/actionTypes';
+import {
+  ADD_WIN_TO_DAY_TRACKER,
+  ADD_LOSS_TO_DAY_TRACKER,
+  LOAD_TRADE_SETTINGS_SUCCESS,
+  LOAD_MARKETS_SUCCESS,
+  LOAD_TRADING_ACCOUNTS_SUCCESS,
+  STREAMING_DATA_RECEIVED,
+  CREATE_TRADE_SUCCESS
+} from '../constants/actionTypes';
 import objectAssign from 'object-assign';
 import initialState from './initialState';
+import _ from 'underscore';
+import {EconomicIndicator} from '../entities';
 
 // IMPORTANT: Note that with Redux, state should NEVER be changed.
 // State is considered immutable. Instead,
@@ -37,11 +47,30 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
 
       return newState;
 
+    case CREATE_TRADE_SUCCESS:
+    {
+      newState = objectAssign({}, state, {
+        id: state.id + 1
+      });
+      addTrade(newState, action.trade.AdjProfitLoss);
+      return newState;
+    }
+
     case LOAD_TRADE_SETTINGS_SUCCESS:
+    {
       if (action.tradeSettings.length > 0) {
         newState = Object.assign({}, state, {
           activeTradeSettings: Object.assign({}, action.tradeSettings[0]),
           allTradeSettings: [...action.tradeSettings]
+        });
+
+        newState = Object.assign(newState, {
+          quickTrade: {
+            Size: newState.activeTradeSettings.Contracts,
+            RewardTicks: newState.activeTradeSettings.RewardTicks,
+            RiskTicks: newState.activeTradeSettings.RiskTicks,
+            RoundTripCommissions: newState.activeTradeSettings.RoundTripCommissions
+          }
         });
 
         return newState;
@@ -49,27 +78,95 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
       else {
         return state;
       }
+    }
 
-    // case SAVE_FUEL_SAVINGS:
-    //   // For this example, just simulating a save by changing date modified.
-    //   // In a real app using Redux, you might use redux-thunk and handle the async call in fuelSavingsActions.js
-    //   return objectAssign({}, state, {dateModified: action.dateModified});
-    //
-    // case CALCULATE_FUEL_SAVINGS:
-    //   newState = objectAssign({}, state);
-    //   newState[action.fieldName] = action.value;
-    //   newState.necessaryDataIsProvidedToCalculateSavings = necessaryDataIsProvidedToCalculateSavings(newState);
-    //   newState.dateModified = action.dateModified;
-    //
-    //   if (newState.necessaryDataIsProvidedToCalculateSavings) {
-    //     newState.savings = calculateSavings(newState);
-    //   }
-    //
-    //   return newState;
+    case LOAD_MARKETS_SUCCESS:
+    {
+      const m = _.find(action.marketData.markets, function (x) {
+        return x.Symbol == state.quickTrade.Market.Symbol;
+      });
+
+      const newQuickTrade = Object.assign({}, state.quickTrade, {
+        Market: m
+      });
+
+      newState = Object.assign({}, state, {
+        quickTrade: newQuickTrade
+      });
+
+      return newState;
+    }
+
+    case STREAMING_DATA_RECEIVED:
+    {
+      const streamingMarket = EconomicIndicator.assignFromStreamingQuote({
+        symbol: state.quickTrade.Market.CnbcSymbol,
+        last: state.quickTrade.Last
+      }, action.quotes.quotes);
+
+      const newQuickTrade = Object.assign({}, state.quickTrade, {
+        Last: streamingMarket.last
+      });
+
+      newState = Object.assign({}, state, {
+        quickTrade: newQuickTrade
+      });
+
+      return newState;
+    }
+
+    case LOAD_TRADING_ACCOUNTS_SUCCESS:
+    {
+      const tradingAccount = _.find(action.tradingAccounts, function (x) {
+        return x.Active;
+      });
+
+      const newQuickTrade = Object.assign({}, state.quickTrade, {
+        TradingAccountId: tradingAccount.Id
+      });
+
+      newState = Object.assign({}, state, {
+        quickTrade: newQuickTrade
+      });
+
+      return newState;
+    }
 
     default:
       return state;
   }
+}
+
+function addTrade(newState, adjProfitLoss){
+  if(adjProfitLoss > 0){
+    newState.totalReward += adjProfitLoss;
+    newState.winningTrades += 1;
+  }
+  else{
+    newState.totalRisk += Math.abs(adjProfitLoss);
+    newState.losingTrades += 1;
+  }
+
+  newState.totalTrades += 1;
+
+  newState.r = (newState.totalRisk == 0) ? newState.totalTrades : (newState.totalReward / newState.totalRisk);
+  newState.pl += adjProfitLoss;
+  newState.winRate = newState.winningTrades / newState.totalTrades;
+
+  newState.rChartItems = [...newState.rChartItems, {
+    tradeNumber: newState.id,
+    r: newState.r
+  }];
+
+  newState.plChartItems = [...newState.plChartItems, {
+    tradeNumber: newState.id,
+    pl: newState.pl
+  }];
+
+  newState.winRateChartItems = [...newState.winRateChartItems, {
+    tradeNumber: newState.id,
+    winRate: newState.winRate
+  }];
 }
 
 function reconcileR(dayTracker) {

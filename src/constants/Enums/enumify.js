@@ -72,7 +72,7 @@ export class Enum {
 
   static _pushEnumValue(enumValue, name, display = '') {
     enumValue.name = name;
-    enumValue.name = display;
+    enumValue.display = display;
     enumValue.ordinal = this.enumValues.length;
     Object.defineProperty(this, name, {
       value: enumValue,
