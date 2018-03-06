@@ -6,6 +6,7 @@ const utilities = require('../utilities');
 
 module.exports = {
   create(req, res) {
+    console.log(req);
       return Trade
           .create({
             TradingAccountId: req.body.TradingAccountId,
