@@ -3,29 +3,36 @@ import PropTypes from 'prop-types';
 import CurrencyInput from '../common/CurrencyInput';
 import NumberInput from '../common/NumberInput';
 import MyDropdown from '../common/MyDropdown';
+import ToggleButton from '../common/ToggleButton';
 import {TradeTypes, TradeTriggers, TrendTypes} from 'wave-trader-enums';
 import {Button, Icon, Form, Label} from 'semantic-ui-react';
 import moment from 'moment';
 import numeral from 'numeral';
+import * as SemanticUiColors from '../../constants/SemanticUiColors';
 
-// quickTrade: {
-//   MarketId: 0,
-//     TradingAccountId: 0,
-//     TradeType: 0,
-//     Trigger: 0,
-//     Trend: 0,
-//     EntryDate: 0,
-//     ExitDate: 0,
-//     EntryPrice: 0,
-//     ExitPrice: 0,
-//     Commissions: 0,
-//     ProfitLoss: 0,
-//     AdjProfitLoss: 0,
-//     ProfitLossPerContract: 0,
-//     Volatile: false,
-//     Size: 0,
-//     TickRange: 0
-// }
+const tradeTypeItems = [
+  {display: TradeTypes.Long.display, value: TradeTypes.Long.ordinal, color: SemanticUiColors.GREEN.Name},
+  {display: TradeTypes.Short.display, value: TradeTypes.Short.ordinal, color: SemanticUiColors.RED.Name}
+];
+
+const trendItems = [
+  {display: TrendTypes.Bullish.display, value: TrendTypes.Bullish.ordinal, color: SemanticUiColors.GREEN.Name},
+  {display: TrendTypes.Neutral.display, value: TrendTypes.Neutral.ordinal, color: SemanticUiColors.GREY.Name},
+  {display: TrendTypes.Bearish.display, value: TrendTypes.Bearish.ordinal, color: SemanticUiColors.RED.Name}
+];
+
+const triggerItems = [
+  {display: TradeTriggers.Signals.display, value: TradeTriggers.Signals.ordinal, color: SemanticUiColors.GREEN.Name},
+  {display: TradeTriggers.Support.display, value: TradeTriggers.Support.ordinal, color: SemanticUiColors.PURPLE.Name},
+  {display: TradeTriggers.Resistance.display, value: TradeTriggers.Resistance.ordinal, color: SemanticUiColors.ORANGE.Name},
+  {display: TradeTriggers.BullishBreakout.display, value: TradeTriggers.BullishBreakout.ordinal, color: SemanticUiColors.PINK.Name},
+  {display: TradeTriggers.BearishBreakout.display, value: TradeTriggers.BearishBreakout.ordinal, color: SemanticUiColors.YELLOW.Name}
+];
+
+const volatileItems = [
+  {display: "Yes", value: true, color: SemanticUiColors.RED.Name},
+  {display: "No", value: false, color: SemanticUiColors.GREEN.Name}
+];
 
 export class QuickTradeEditor extends React.Component {
   constructor(props, context) {
@@ -91,12 +98,7 @@ export class QuickTradeEditor extends React.Component {
                 label="Size"
                 value={this.props.quickTrade.Size}
                 onChange={this.updateNormal}/>
-              <MyDropdown
-                name="TradeType"
-                label="Direction"
-                value={this.props.quickTrade.TradeType}
-                onChange={this.updateSemantic}
-                items={TradeTypes.enumValues.filter(x => x.name !== "None").map(x => Object.assign({}, {text: x.display, value: x.ordinal}))}/>
+              <ToggleButton name="TradeType" label="Direction" items={tradeTypeItems} change={this.props.updateQuickTrade}></ToggleButton>
               <NumberInput
                 name="RewardTicks"
                 label="Reward Ticks"
@@ -109,23 +111,9 @@ export class QuickTradeEditor extends React.Component {
                 onChange={this.updateNormal}/>
             </div>
             <div className="four fields">
-              <MyDropdown
-                name="Trend"
-                label="Trend"
-                value={this.props.quickTrade.Trend}
-                onChange={this.updateSemantic}
-                items={TrendTypes.enumValues.filter(x => x.name !== "None").map(x => Object.assign({}, {text: x.display, value: x.ordinal}))}/>
-              <Form.Field>
-                <label>Volatile</label>
-                <Button fluid onClick={this.toggleVolatile}
-                        content={this.props.quickTrade.Volatile ? "Yes" : "No"}></Button>
-              </Form.Field>
-              <MyDropdown
-                name="Trigger"
-                label="Trigger"
-                value={this.props.quickTrade.Trigger}
-                onChange={this.updateSemantic}
-                items={TradeTriggers.enumValues.filter(x => x.name !== "None").map(x => Object.assign({}, {text: x.display, value: x.ordinal}))}/>
+              <ToggleButton name="Trend" label="Trend" items={trendItems} change={this.props.updateQuickTrade}></ToggleButton>
+              <ToggleButton name="Volatile" label="Volatile" items={volatileItems} change={this.props.updateQuickTrade}></ToggleButton>
+              <ToggleButton name="Trigger" label="Trigger" items={triggerItems} change={this.props.updateQuickTrade}></ToggleButton>
               <NumberInput
                 name="TickRange"
                 label="Tick Range"
