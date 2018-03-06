@@ -1,6 +1,7 @@
 const express = require('express'),
   path  = require('path'),
-  compression = require('compression');
+  compression = require('compression'),
+  bodyParser = require('body-parser');
 
 /*eslint-disable no-console */
 
