@@ -29,7 +29,7 @@ const triggerItems = [
   {display: TradeTriggers.BearishBreakout.display, value: TradeTriggers.BearishBreakout.ordinal, color: SemanticUiColors.YELLOW.Name}
 ];
 
-const volatileItems = [
+const bracketGoodItems = [
   {display: "Yes", value: true, color: SemanticUiColors.RED.Name},
   {display: "No", value: false, color: SemanticUiColors.GREEN.Name}
 ];
@@ -40,7 +40,6 @@ export class QuickTradeEditor extends React.Component {
     this.updateNormal = this.updateNormal.bind(this);
     this.updateSemantic = this.updateSemantic.bind(this);
     this.startTrade = this.startTrade.bind(this);
-    this.toggleVolatile = this.toggleVolatile.bind(this);
     this.recordWin = this.recordWin.bind(this);
     this.recordLoss = this.recordLoss.bind(this);
   }
@@ -70,11 +69,6 @@ export class QuickTradeEditor extends React.Component {
         name: "EntryPrice",
         value: this.props.quickTrade.Last
       }]);
-  }
-
-  toggleVolatile(event) {
-    event.preventDefault();
-    this.props.updateQuickTrade([{name: "Volatile", value: !this.props.quickTrade.Volatile}]);
   }
 
   recordWin(event) {
@@ -110,14 +104,20 @@ export class QuickTradeEditor extends React.Component {
                 value={this.props.quickTrade.RiskTicks}
                 onChange={this.updateNormal}/>
             </div>
-            <div className="four fields">
+            <div className="five fields">
               <ToggleButton name="Trend" label="Trend" items={trendItems} change={this.props.updateQuickTrade}></ToggleButton>
-              <ToggleButton name="Volatile" label="Volatile" items={volatileItems} change={this.props.updateQuickTrade}></ToggleButton>
+              <ToggleButton name="BracketGood" label="Bracket Good" items={bracketGoodItems} change={this.props.updateQuickTrade}></ToggleButton>
               <ToggleButton name="Trigger" label="Trigger" items={triggerItems} change={this.props.updateQuickTrade}></ToggleButton>
               <NumberInput
-                name="TickRange"
-                label="Tick Range"
-                value={this.props.quickTrade.TickRange}
+                name="ATR"
+                label="ATR"
+                value={this.props.quickTrade.ATR}
+                onChange={this.updateNormal}/>
+              <NumberInput
+                name="SmaDiff"
+                label="Sma Diff"
+                step=".05"
+                value={this.props.quickTrade.SmaDiff}
                 onChange={this.updateNormal}/>
             </div>
           </form>

@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    Volatile: {
+    BracketGood: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
@@ -58,7 +58,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(18, 7),
       allowNull: false,
     },
-    TickRange: {
+    ATR: {
+      type: DataTypes.DECIMAL(18, 7),
+      allowNull: false,
+    },
+    SmaDiff: {
       type: DataTypes.DECIMAL(18, 7),
       allowNull: false,
     },

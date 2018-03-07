@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const NumberInput = ({name, label, onChange, placeholder, value, error, postfix}) => {
+const NumberInput = ({name, label, onChange, placeholder, value, error, postfix, step = 1}) => {
   let wrapperClass = 'field';
   if (error && error.length > 0) {
     wrapperClass += " " + 'error';
@@ -20,6 +20,7 @@ const NumberInput = ({name, label, onChange, placeholder, value, error, postfix}
           type="number"
           name={name}
           placeholder={placeholder}
+          step={step}
           value={value}
           onChange={onChange} />
         {postfix && <div className="ui label">
