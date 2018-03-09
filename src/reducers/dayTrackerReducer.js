@@ -49,8 +49,34 @@ export default function dayTrackerReducer(state = initialState.dayTracker, actio
 
     case CREATE_TRADE_SUCCESS:
     {
+      let streak = state.quickTrade.Streak;
+
+      if(streak == 0 && action.trade.AdjProfitLoss > 0){
+        streak = 1;
+      }
+      else if(streak == 0 && action.trade.AdjProfitLoss < 0){
+        streak = -1;
+      }
+      else if(streak > 0 && action.trade.AdjProfitLoss > 0){
+        streak += 1;
+      }
+      else if(streak > 0 && action.trade.AdjProfitLoss < 0){
+        streak = -1;
+      }
+      else if(streak < 0 && action.trade.AdjProfitLoss > 0){
+        streak = 1;
+      }
+      else if(streak < 0 && action.trade.AdjProfitLoss < 0){
+        streak -= 1;
+      }
+
+      const newQuickTrade = Object.assign({}, state.quickTrade, {
+        Streak: streak
+      });
+
       newState = objectAssign({}, state, {
-        id: state.id + 1
+        id: state.id + 1,
+        quickTrade: newQuickTrade
       });
       addTrade(newState, action.trade.AdjProfitLoss);
       return newState;

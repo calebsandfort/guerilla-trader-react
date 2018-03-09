@@ -38,10 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    BracketGood: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
     AdjProfitLoss: {
       type: DataTypes.DECIMAL(18, 7),
       allowNull: false,
@@ -64,6 +60,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     SmaDiff: {
       type: DataTypes.DECIMAL(18, 7),
+      allowNull: false,
+    },
+    Streak: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     EntryDate: {

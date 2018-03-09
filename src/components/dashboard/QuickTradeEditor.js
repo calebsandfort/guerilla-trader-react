@@ -30,8 +30,8 @@ const triggerItems = [
 ];
 
 const bracketGoodItems = [
-  {display: "Yes", value: true, color: SemanticUiColors.RED.Name},
-  {display: "No", value: false, color: SemanticUiColors.GREEN.Name}
+  {display: "Yes", value: true, color: SemanticUiColors.GREEN.Name},
+  {display: "No", value: false, color: SemanticUiColors.RED.Name}
 ];
 
 export class QuickTradeEditor extends React.Component {
@@ -103,10 +103,14 @@ export class QuickTradeEditor extends React.Component {
                 label="Risk Ticks"
                 value={this.props.quickTrade.RiskTicks}
                 onChange={this.updateNormal}/>
+              <NumberInput
+                name="Streak"
+                label="Streak"
+                value={this.props.quickTrade.Streak}
+                onChange={this.updateNormal}/>
             </div>
-            <div className="five fields">
+            <div className="four fields">
               <ToggleButton name="Trend" label="Trend" items={trendItems} change={this.props.updateQuickTrade}></ToggleButton>
-              <ToggleButton name="BracketGood" label="Bracket Good" items={bracketGoodItems} change={this.props.updateQuickTrade}></ToggleButton>
               <ToggleButton name="Trigger" label="Trigger" items={triggerItems} change={this.props.updateQuickTrade}></ToggleButton>
               <NumberInput
                 name="ATR"

@@ -14,7 +14,7 @@ module.exports = {
             Trigger: req.body.Trigger,
             Trend: req.body.Trend,
             Size: req.body.Size,
-            BracketGood: req.body.BracketGood,
+            Streak: req.body.Streak,
             AdjProfitLoss: req.body.AdjProfitLoss,
             ProfitLoss: req.body.ProfitLoss,
             ProfitLossPerContract: req.body.ProfitLossPerContract,

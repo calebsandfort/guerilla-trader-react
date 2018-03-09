@@ -54,8 +54,12 @@ export class DashboardPage extends React.Component {
       this.setState({dayTracker: Object.assign({}, nextProps.dayTracker)});
     }
 
-    if(this.props.dayTracker.quickTrade.Last == 0 && nextProps.dayTracker.quickTrade.Last > 0){
-      this.setState({quickTrade: Object.assign({}, nextProps.dayTracker.quickTrade)});
+    if(this.props.dayTracker.quickTrade.Streak != nextProps.dayTracker.quickTrade.Streak){
+      this.setState({quickTrade: Object.assign({}, this.state.quickTrade, {Streak: nextProps.dayTracker.quickTrade.Streak})});
+    }
+
+    if(this.props.dayTracker.quickTrade.Last != nextProps.dayTracker.quickTrade.Last){
+      this.setState({quickTrade: Object.assign({}, this.state.quickTrade, {Last: nextProps.dayTracker.quickTrade.Last})});
     }
   }
 
@@ -181,10 +185,10 @@ export class DashboardPage extends React.Component {
       Trigger: quickTrade.Trigger,
       Trend: quickTrade.Trend,
       Size: quickTrade.Size,
-      BracketGood: quickTrade.BracketGood,
       Commissions: quickTrade.RoundTripCommissions * quickTrade.Size,
       ATR: quickTrade.ATR,
       SmaDiff: quickTrade.SmaDiff,
+      Streak: quickTrade.Streak,
       EntryDate: quickTrade.EntryDate,
       EntryPrice: quickTrade.EntryPrice,
       ExitDate: moment().format("M/D/YYYY h:mm:ss a"),

@@ -28,7 +28,7 @@
     "test:cover": "npm run test -- --coverage ",
     "test:cover:CI": "npm run test:CI -- --coverage && cat ./coverage/lcov.info | node_modules/coveralls/bin/coveralls.js",
     "test:watch": "jest --watch",
-    "test:mocha": "mocha --reporter nyan tools/testSetup.js src/actions/*.test.js src/reducers/*.test.js src/constants/Enums/*.test.js",
+    "test:mocha": "mocha --reporter nyan tools/testSetup.js src/actions/*.test.js src/reducers/*.test.js src/constants/Enums/*.test.js src/MachineLearning/**/*.test.js",
     "test:mocha:watch": "npm run test:mocha -- --watch",
     "open:cover": "npm run test:cover && opn ./coverage/lcov-report/index.html",
     "analyze-bundle": "babel-node ./tools/analyzeBundle.js",

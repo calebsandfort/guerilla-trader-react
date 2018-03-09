@@ -104,7 +104,7 @@ export class DayTrackerComponent extends React.Component {
                     'grey': this.props.dayTracker.totalTrades <= this.props.dayTracker.maxTrades,
                     'orange': this.props.dayTracker.totalTrades > this.props.dayTracker.maxTrades && this.props.dayTracker.totalTrades < this.props.dayTracker.maxTrades,
                     'red': this.props.dayTracker.totalTrades >= (this.props.dayTracker.maxTrades * 2)
-                  })}>Trades: {this.props.dayTracker.totalTrades}</a>
+                  })}>Trades: {`${this.props.dayTracker.winningTrades} - ${this.props.dayTracker.losingTrades} => ${this.props.dayTracker.totalTrades}`}</a>
                   <a className={classNames({
                     'ui': true,
                     'label': true,
