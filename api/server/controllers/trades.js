@@ -103,6 +103,45 @@ module.exports = {
         res.status(400).send(error);
       });
   },
+  findAll(req, res) {
+    let orderArray = null;
+
+    if(req.query.sort !== undefined && req.query.sort.length){
+      orderArray = req.query.sort.map(x => [x.field, x.dir]);
+    }
+
+    let sequalizeFilter = null;
+
+    if(req.query.filter && req.query.filter.filters && req.query.filter.filters.length > 0){
+      let filterArray = [];
+
+      for(let i = 0; i < req.query.filter.filters.length; i++){
+        const kf = req.query.filter.filters[i];
+        const sf = {};
+
+        sf[kf.field] = {
+          [utilities.kendoOpToSequalizeOp(kf.operator)]: utilities.parameterize(kf.operator, kf.value)
+        };
+
+        filterArray.push(sf);
+      }
+
+      sequalizeFilter = {[Op.and]: filterArray};
+    }
+
+    return Trade
+      .findAll({
+        where: sequalizeFilter,
+        order: orderArray
+      })
+      .then(trades => {
+        res.status(200).send(trades)
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  },
   count(req, res) {
     return Trade
       .count()

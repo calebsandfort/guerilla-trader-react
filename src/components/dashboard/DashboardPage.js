@@ -61,6 +61,14 @@ export class DashboardPage extends React.Component {
     if(this.props.dayTracker.quickTrade.Last != nextProps.dayTracker.quickTrade.Last){
       this.setState({quickTrade: Object.assign({}, this.state.quickTrade, {Last: nextProps.dayTracker.quickTrade.Last})});
     }
+
+    if(this.props.dayTracker.quickTrade.TradingAccountId != nextProps.dayTracker.quickTrade.TradingAccountId){
+      this.setState({quickTrade: Object.assign({}, this.state.quickTrade, {TradingAccountId: nextProps.dayTracker.quickTrade.TradingAccountId})});
+    }
+
+    if(this.props.dayTracker.quickTrade.Market.Id != nextProps.dayTracker.quickTrade.Market.Id){
+      this.setState({quickTrade: Object.assign({}, this.state.quickTrade, {Market: nextProps.dayTracker.quickTrade.Market})});
+    }
   }
 
   setDialogVisibility(name, visible){

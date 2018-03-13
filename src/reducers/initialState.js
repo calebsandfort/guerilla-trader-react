@@ -40,6 +40,9 @@ export default {
     }
   },
   currentDate: new Date(),
+  predictionEngine: {
+    decisionTree: null
+  },
   dayTracker: {
     id: 0,
     allTradeSettings: [],
@@ -75,6 +78,7 @@ export default {
     maxTrades: 10,
     quickTrade: {
       Market: {
+        Id: 0,
         TickValue: 5.00,
         TickSize: .25,
         CnbcSymbol: '@ND.1',

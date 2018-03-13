@@ -52,6 +52,7 @@ module.exports = (app) => {
   app.get('/api/stocks', stocksController.list);
 
   app.get('/api/trades/findAndCountAll', tradesController.findAndCountAll);
+  app.get('/api/trades/findAll', tradesController.findAll);
   app.get('/api/trades/listAndCount', tradesController.listAndCount);
   app.get('/api/trades/count', tradesController.count);
   app.get('/api/trades', tradesController.list);

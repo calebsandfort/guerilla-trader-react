@@ -2,9 +2,7 @@ let chai = require('chai');
 let should = chai.should();
 import _ from 'underscore';
 import moment from 'moment';
-import {getDecisionTreeObservationFromTrade} from '../utilities';
-
-import {DecisionTree} from '../DecisionTree';
+import {DecisionTreeBuilder, getDecisionTreeObservationFromTrade} from '../../MachineLearning';
 
 const my_data = [['slashdot', 'USA', 'yes', 18, 'None'],
   ['google', 'France', 'yes', 23, 'Premium'],
@@ -26,7 +24,7 @@ const my_data = [['slashdot', 'USA', 'yes', 18, 'None'],
 describe('Decision Trees', () => {
   describe('divideSet', () => {
     it('it should divide a set properly', () => {
-      const result = DecisionTree.divideSet(my_data, 2, 'yes');
+      const result = DecisionTreeBuilder.divideSet(my_data, 2, 'yes');
       result.set1.length.should.be.eql(8);
       result.set2.length.should.be.eql(8);
     });
@@ -34,7 +32,7 @@ describe('Decision Trees', () => {
 
   describe('divideSet', () => {
     it('it should count unique results properly', () => {
-      const result = DecisionTree.uniqueCounts(my_data);
+      const result = DecisionTreeBuilder.uniqueCounts(my_data);
       result["None"].should.be.eql(7);
       result["Basic"].should.be.eql(6);
       result["Premium"].should.be.eql(3);
@@ -43,14 +41,14 @@ describe('Decision Trees', () => {
 
   describe('entropy', () => {
     it('it should calculate entropy for a set properly', () => {
-      const result = DecisionTree.entropy(my_data);
+      const result = DecisionTreeBuilder.entropy(my_data);
       result.should.be.eql(1.5052408149441479);
     });
   });
 
   describe('buildTree', () => {
     it('it should properly build a tree', () => {
-      const result = DecisionTree.buildTree(my_data, DecisionTree.entropy);
+      const result = DecisionTreeBuilder.buildTree(my_data, DecisionTreeBuilder.entropy);
       result.col.should.be.eql(0);
       result.value.should.be.eql('google');
     });
@@ -58,7 +56,7 @@ describe('Decision Trees', () => {
 
   describe('buildTreeAsync', () => {
     it('it should properly build a tree asynchronously', async() => {
-      const result = await DecisionTree.buildTreeAsync(my_data, DecisionTree.entropy);
+      const result = await DecisionTreeBuilder.buildTreeAsync(my_data, DecisionTreeBuilder.entropy);
       result.col.should.be.eql(0);
       result.value.should.be.eql('google');
     });
@@ -66,8 +64,8 @@ describe('Decision Trees', () => {
 
   describe('classify', () => {
     it('it should properly classify an observation', () => {
-      const tree = DecisionTree.buildTree(my_data, DecisionTree.entropy);
-      const classification = DecisionTree.classify(['(direct)', 'USA', 'yes', 5], tree);
+      const tree = DecisionTreeBuilder.buildTree(my_data, DecisionTreeBuilder.entropy);
+      const classification = DecisionTreeBuilder.classify(['(direct)', 'USA', 'yes', 5], tree);
 
       classification.should.have.property('Basic');
       classification.Basic.should.be.eql(4);
@@ -88,7 +86,7 @@ describe('Decision Trees', () => {
       };
 
       let expected = ["Long", "Signals", "Bearish", 0, (new Date(trade.EntryDate)).getHours(), 18, 1, "win"];
-      
+
       const actual = getDecisionTreeObservationFromTrade(trade);
 
       actual.should.be.eql(expected);

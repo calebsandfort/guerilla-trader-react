@@ -11,7 +11,7 @@ class TradeService extends ServiceBase {
       return super.api().post('/trades', trade);
     }
   }
-  
+
   static pasteTrades(pastedTradesDto, tradingAccount){
     const payload = Object.assign({}, pastedTradesDto, {
       ExitCommissions: 0,
@@ -20,6 +20,10 @@ class TradeService extends ServiceBase {
     });
 
     return super.guerillaTraderMvcApi().post('trade/addTradeFromPaste', payload);
+  }
+
+  static findAllForTradingAccount(tradingAccountId){
+    return super.api().get(`/trades/findAll?filter[logic]=and&filter[filters][0][field]=TradingAccountId&filter[filters][0][operator]=eq&filter[filters][0][value]=${tradingAccountId}`);
   }
 }
 

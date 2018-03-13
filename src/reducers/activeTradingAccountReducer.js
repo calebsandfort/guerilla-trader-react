@@ -1,13 +1,29 @@
+import _ from 'underscore';
+import { loop, Cmd } from 'redux-loop';
 import * as types from '../constants/actionTypes';
 import initialState from './initialState';
+import TradeService from '../services/tradeService';
+import {loadTradesSuccess} from '../actions/tradeActions';
 
 export default function activeTradingAccountReducer(state = initialState.activeTradingAccount, action) {
+  let newState;
+
   switch (action.type) {
     case types.LOAD_TRADING_ACCOUNTS_SUCCESS:
     {
-      const foundTradingAccount = action.tradingAccounts.filter(ta => ta.Active);
-      if (foundTradingAccount.length) {
-        return Object.assign({}, foundTradingAccount[0]); //since filter returns an array, have to grab the first.
+      const activeTradingAccount = _.find(action.tradingAccounts, function (x) {
+        return x.Active;
+      });
+      if (typeof activeTradingAccount != 'undefined') {
+        newState = Object.assign({}, activeTradingAccount);
+
+        return loop(
+          newState,
+          Cmd.run(TradeService.findAllForTradingAccount, {
+            successActionCreator: loadTradesSuccess,
+            args: [activeTradingAccount.Id]
+          })
+        );
       }
       return state;
     }
