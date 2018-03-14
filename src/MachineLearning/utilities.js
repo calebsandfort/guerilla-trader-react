@@ -13,8 +13,29 @@ import {TradeTypes, TradeTriggers, TrendTypes} from 'wave-trader-enums';
 //     AdjProfitLoss
 // }
 
+export function getObservationsFromModels(models, mappingFunc){
+  const observations = [];
+  const labels = [];
+
+  let observation = [];
+  let label = null;
+
+  for(let model of models){
+    [observation, label] = mappingFunc(model);
+
+    observations.push(observation);
+
+    if(label != null){
+      labels.push(label);
+    }
+  }
+
+  return [observations, labels];
+}
+
 export function getDecisionTreeObservationFromTrade(trade) {
   const observation = [];
+  let label = null;
 
   observation.push(TradeTypes.enumOrdinalOf(trade.TradeType).name);
   observation.push(TradeTriggers.enumOrdinalOf(trade.Trigger).name);
@@ -25,8 +46,8 @@ export function getDecisionTreeObservationFromTrade(trade) {
   observation.push(trade.SmaDiff);
 
   if (_.has(trade, "AdjProfitLoss")) {
-    observation.push(trade.AdjProfitLoss > 0 ? "win" : "loss");
+    label = trade.AdjProfitLoss > 0 ? "win" : "loss";
   }
 
-  return observation;
+  return [observation, label];
 }

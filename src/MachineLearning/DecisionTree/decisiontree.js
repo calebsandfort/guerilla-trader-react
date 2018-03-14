@@ -1,10 +1,55 @@
 import _ from 'underscore';
 import DecisionNode from './decisionnode';
 
+export class DecisionTree {
+  constructor({scoref = entropy}){
+    this.tree = null;
+    this.scoref = scoref;
+  }
+
+  train(data, labels){
+    let rows = [];
+
+    for (let i = 0; i < data.length; i++) {
+      rows.push([...data[i], labels[i]]);
+    }
+
+    this.tree = buildTree(rows, this.scoref);
+  }
+
+  predict(dataset) {
+    if (Array.isArray(dataset)) {
+      if (typeof dataset[0] === 'number' || typeof dataset[0] === 'string') {
+        return extractResult(classify(dataset, this.tree));
+      } else if (Array.isArray(dataset[0]) && (typeof dataset[0][0] === 'number' || typeof dataset[0][0] === 'string')) {
+        const predictions = new Array(dataset.length);
+        for (let i = 0; i < dataset.length; i++) {
+          predictions[i] = extractResult(classify(dataset[i], this.tree));
+        }
+        return predictions;
+      }
+    }
+    throw new TypeError('dataset to predict must be an array or a matrix');
+  }
+}
+
+export default DecisionTree;
+
+function extractResult(results){
+  let value = 0;
+  let result = null;
+  for (let key of Object.keys(results)) {
+    if(results[key] > value){
+      value = results[key];
+      result = key;
+    }
+  }
+  return result;
+}
 
 // Divides a set on a specific column. Can handle numeric
 // or nominal values
-export function divideSet(rows, column, value) {
+function divideSet(rows, column, value) {
   // Make a function that tells us if a row is in
   // the first group (true) or the second group (false)
   let split_function = null;
@@ -34,7 +79,7 @@ export function divideSet(rows, column, value) {
 
 // Create counts of possible results (the last column of
 // each row is the result)
-export function uniqueCounts(rows) {
+function uniqueCounts(rows) {
   let results = {};
   let r = null;
 
@@ -63,11 +108,12 @@ export function entropy(rows) {
   return ent;
 }
 
-export function buildTreeAsync(rows, scoref = entropy) {
+export function buildTreeAsync(data, labels, scoref = entropy) {
   return new Promise((resolve, reject) => {
     try {
-      const tree = buildTree(rows, scoref);
-      resolve(tree);
+      const decisionTree = new DecisionTree(scoref);
+      decisionTree.train(data, labels);
+      resolve(decisionTree);
     }
     catch (error) {
       reject(error);
@@ -75,7 +121,7 @@ export function buildTreeAsync(rows, scoref = entropy) {
   });
 }
 
-export function buildTree(rows, scoref = entropy) {
+function buildTree(rows, scoref = entropy) {
   if (rows.length == 0) return new DecisionNode();
 
   let current_score = scoref(rows);
@@ -122,7 +168,7 @@ export function buildTree(rows, scoref = entropy) {
   }
 }
 
-export function classify(observation, tree) {
+function classify(observation, tree) {
   if (tree.results != null) {
     return tree.results;
   }

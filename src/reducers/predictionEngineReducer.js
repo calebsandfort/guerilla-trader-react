@@ -7,7 +7,7 @@ import {
 
 import initialState from './initialState';
 import {buildDecisionTreeSuccess, buildDecisionTreeFailed} from '../actions/predictionEngineActions';
-import {DecisionTreeBuilder, getDecisionTreeObservationFromTrade} from '../MachineLearning';
+import {DecisionTree, getDecisionTreeObservationFromTrade, getObservationsFromModels, buildTreeAsync} from '../MachineLearning';
 
 import _ from 'underscore';
 
@@ -17,12 +17,14 @@ export default function predictionEnginReducer(state = initialState.predictionEn
   switch (action.type) {
     case LOAD_TRADES_SUCCESS:
     {
+      const [observations, labels] = getObservationsFromModels(action.trades.data, getDecisionTreeObservationFromTrade);
+
       return loop(
         state,
-        Cmd.run(DecisionTreeBuilder.buildTreeAsync, {
+        Cmd.run(buildTreeAsync, {
           successActionCreator: buildDecisionTreeSuccess,
           failActionCreator: buildDecisionTreeFailed,
-          args: [action.trades.data.map(x => getDecisionTreeObservationFromTrade(x)), DecisionTreeBuilder.entropy]
+          args: [observations, labels, DecisionTree.entropy]
         })
       );
     }
@@ -38,7 +40,6 @@ export default function predictionEnginReducer(state = initialState.predictionEn
 
     case BUILD_DECISION_TREE_FAILED:
     {
-      console.log(action.error);
       return state;
     }
 
