@@ -200,7 +200,9 @@ export class DashboardPage extends React.Component {
       EntryDate: quickTrade.EntryDate,
       EntryPrice: quickTrade.EntryPrice,
       ExitDate: moment().format("M/D/YYYY h:mm:ss a"),
-      MarketId: quickTrade.Market.Id
+      MarketId: quickTrade.Market.Id,
+      Confident: quickTrade.Confident,
+      GoodTargets: quickTrade.GoodTargets
     };
 
     if(win && newTrade.TradeType == TradeTypes.Long.ordinal){
@@ -275,6 +277,7 @@ export class DashboardPage extends React.Component {
           quickTrade={this.state.quickTrade}
           updateQuickTrade={this.updateQuickTrade}
           recordQuickTrade={this.recordQuickTrade}
+          predictionEngine={this.props.predictionEngine}
         />
       </div>
     );
@@ -287,7 +290,8 @@ function mapStateToProps(state, ownProps) {
     dayTracker: state.dayTracker,
     currentDate: state.currentDate,
     marketData: state.marketData,
-    streamingData: state.streamingData
+    streamingData: state.streamingData,
+    predictionEngine: state.predictionEngine
   };
 }
 

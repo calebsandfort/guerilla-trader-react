@@ -41,7 +41,7 @@ export default {
   },
   currentDate: new Date(),
   predictionEngine: {
-    decisionTree: null
+    algorithms: new Map()
   },
   dayTracker: {
     id: 0,
@@ -98,6 +98,8 @@ export default {
       RewardTicks: 12.0,
       RiskTicks: 23.0,
       RoundTripCommissions: 6.88,
+      Confident: false,
+      GoodTargets: false,
       get Reward(){
         return this.Market.TickValue * this.RewardTicks * this.Size;
       },

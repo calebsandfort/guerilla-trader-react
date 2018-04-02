@@ -7,7 +7,8 @@ import {
 
 import initialState from './initialState';
 import {buildDecisionTreeSuccess, buildDecisionTreeFailed} from '../actions/predictionEngineActions';
-import {DecisionTree, getDecisionTreeObservationFromTrade, getObservationsFromModels, buildTreeAsync} from '../MachineLearning';
+import {DecisionTree, getDecisionTreeObservationFromTrade, getObservationsFromModels,
+  buildTreeAsync, entropy, loadPredictionAlgorithmAsync} from '../MachineLearning';
 
 import _ from 'underscore';
 
@@ -21,18 +22,21 @@ export default function predictionEnginReducer(state = initialState.predictionEn
 
       return loop(
         state,
-        Cmd.run(buildTreeAsync, {
+        Cmd.run(loadPredictionAlgorithmAsync, {
           successActionCreator: buildDecisionTreeSuccess,
           failActionCreator: buildDecisionTreeFailed,
-          args: [observations, labels, DecisionTree.entropy]
+          args: ["DecisionTree", observations, labels, {scoref: entropy}]
         })
       );
     }
 
     case BUILD_DECISION_TREE_SUCCESS:
     {
+      let algorithms = new Map(...state.algorithms);
+      algorithms.set(action.algorithm.name, action.algorithm);
+
       newState = Object.assign({}, state, {
-        decisionTree: action.decisionTree
+        algorithms: algorithms
       });
 
       return newState;

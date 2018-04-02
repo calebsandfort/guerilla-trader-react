@@ -13,7 +13,6 @@ module.exports = {
   //         .catch(error => res.status(400).send(error));
   // },
   list(req, res) {
-    console.log(req.query);
     return Stock
       .findAll({
         order: sequelize.literal('Name ASC'),
@@ -43,7 +42,7 @@ module.exports = {
         sf[kf.field] = {
           [utilities.kendoOpToSequalizeOp(kf.operator)]: utilities.parameterize(kf.operator, kf.value)
         };
-        
+
         filterArray.push(sf);
       }
 

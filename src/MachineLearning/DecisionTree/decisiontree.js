@@ -2,7 +2,12 @@ import _ from 'underscore';
 import DecisionNode from './decisionnode';
 
 export class DecisionTree {
-  constructor({scoref = entropy}){
+  constructor(options = {}){
+    const {
+      scoref = entropy
+    } = options;
+    
+    
     this.tree = null;
     this.scoref = scoref;
   }
@@ -108,10 +113,10 @@ export function entropy(rows) {
   return ent;
 }
 
-export function buildTreeAsync(data, labels, scoref = entropy) {
+export function buildTreeAsync(data, labels, options = {}) {
   return new Promise((resolve, reject) => {
     try {
-      const decisionTree = new DecisionTree(scoref);
+      const decisionTree = new DecisionTree(options);
       decisionTree.train(data, labels);
       resolve(decisionTree);
     }

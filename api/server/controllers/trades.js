@@ -26,6 +26,8 @@ module.exports = {
             ExitDate: req.body.ExitDate,
             ExitPrice: req.body.ExitPrice,
             MarketId: req.body.MarketId,
+            Confident: req.body.Confident,
+            GoodTargets: req.body.GoodTargets,
           })
           .then(trade => res.status(201).send(trade))
           .catch(error => {

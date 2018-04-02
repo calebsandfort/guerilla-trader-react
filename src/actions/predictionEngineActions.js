@@ -1,7 +1,7 @@
 import * as types from '../constants/actionTypes';
 
 export function buildDecisionTreeSuccess(decisionTree) {
-  return {type: types.BUILD_DECISION_TREE_SUCCESS, decisionTree};
+  return {type: types.BUILD_DECISION_TREE_SUCCESS, algorithm: decisionTree};
 }
 
 export function buildDecisionTreeFailed(error){

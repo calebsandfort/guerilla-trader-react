@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import TradeSettings from './TradeSettings';
 import QuickTradeEditor from './QuickTradeEditor';
 import YayNayButton from '../common/YayNayButton';
+import PredictionEngineWrapper from './PredictionEngineWrapper';
 
 export class DayTrackerComponent extends React.Component {
   constructor(props, context) {
@@ -141,17 +142,16 @@ export class DayTrackerComponent extends React.Component {
                   <div className="ui divider"></div>
                 </div>
               </div>
-              <div className="three column row" style={{paddingTop: "0"}}>
-                {this.props.dayTracker.rChartItems.length > 0 &&
-                <div className="column">
-                  <SimpleLineChart {...this.state.rChartOptions} />
-                </div>}
+              <div className="row" style={{paddingTop: "0"}}>
+                <div className="eight wide column">
+                  <PredictionEngineWrapper predictionEngine={this.props.predictionEngine} />
+                </div>
                 {this.props.dayTracker.plChartItems.length > 0 &&
-                <div className="column">
+                <div className="four wide column">
                   <SimpleLineChart {...this.state.plChartOptions} />
                 </div>}
                 {this.props.dayTracker.winRateChartItems.length > 0 &&
-                <div className="column">
+                <div className="four wide column">
                   <SimpleLineChart {...this.state.winRateChartOptions} />
                 </div>}
               </div>

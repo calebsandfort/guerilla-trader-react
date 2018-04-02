@@ -60,7 +60,8 @@ export class DashboardDetailsWrapper extends React.Component {
               updateTradeSettings={this.props.updateTradeSettings}
               quickTrade={this.props.quickTrade}
               updateQuickTrade={this.props.updateQuickTrade}
-              recordQuickTrade={this.props.recordQuickTrade} />
+              recordQuickTrade={this.props.recordQuickTrade}
+              predictionEngine={this.props.predictionEngine} />
           </div>
 
         </TabContent>
