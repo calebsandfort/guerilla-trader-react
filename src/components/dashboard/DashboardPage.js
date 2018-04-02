@@ -200,9 +200,7 @@ export class DashboardPage extends React.Component {
       EntryDate: quickTrade.EntryDate,
       EntryPrice: quickTrade.EntryPrice,
       ExitDate: moment().format("M/D/YYYY h:mm:ss a"),
-      MarketId: quickTrade.Market.Id,
-      Confident: quickTrade.Confident,
-      GoodTargets: quickTrade.GoodTargets
+      MarketId: quickTrade.Market.Id
     };
 
     if(win && newTrade.TradeType == TradeTypes.Long.ordinal){

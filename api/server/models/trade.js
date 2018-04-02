@@ -85,14 +85,6 @@ module.exports = (sequelize, DataTypes) => {
     MarketId: {
       type: DataTypes.INTEGER,
       allowNull: true,
-    },
-    Confident: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    GoodTargets: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
     }
   },{
     timestamps: false,

@@ -103,7 +103,7 @@ export class QuickTradeEditor extends React.Component {
       <div className="ui grid">
         <div className="ten wide column">
           <form className="ui form">
-            <div className="six fields">
+            <div className="five fields">
               <NumberInput
                 name="Size"
                 label="Size"
@@ -126,9 +126,8 @@ export class QuickTradeEditor extends React.Component {
                 label="Streak"
                 value={this.props.quickTrade.Streak}
                 onChange={this.updateNormal}/>
-              <ToggleButton name="Confident" label="Confident" items={booleanItems} change={this.props.updateQuickTrade}></ToggleButton>
             </div>
-            <div className="five fields">
+            <div className="four fields">
               <ToggleButton name="Trend" label="Trend" items={trendItems}
                             change={this.props.updateQuickTrade}></ToggleButton>
               <ToggleButton name="Trigger" label="Trigger" items={triggerItems}
@@ -144,7 +143,6 @@ export class QuickTradeEditor extends React.Component {
                 step=".05"
                 value={this.props.quickTrade.SmaDiff}
                 onChange={this.updateNormal}/>
-              <ToggleButton name="GoodTargets" label="Good Targets" items={booleanItems} change={this.props.updateQuickTrade}></ToggleButton>
             </div>
           </form>
         </div>
