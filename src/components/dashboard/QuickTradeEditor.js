@@ -24,9 +24,26 @@ const trendItems = [
 const triggerItems = [
   {display: TradeTriggers.Signals.display, value: TradeTriggers.Signals.ordinal, color: SemanticUiColors.GREEN.Name},
   {display: TradeTriggers.Support.display, value: TradeTriggers.Support.ordinal, color: SemanticUiColors.PURPLE.Name},
-  {display: TradeTriggers.Resistance.display, value: TradeTriggers.Resistance.ordinal, color: SemanticUiColors.ORANGE.Name},
-  {display: TradeTriggers.BullishBreakout.display, value: TradeTriggers.BullishBreakout.ordinal, color: SemanticUiColors.PINK.Name},
-  {display: TradeTriggers.BearishBreakout.display, value: TradeTriggers.BearishBreakout.ordinal, color: SemanticUiColors.YELLOW.Name}
+  {
+    display: TradeTriggers.Resistance.display,
+    value: TradeTriggers.Resistance.ordinal,
+    color: SemanticUiColors.ORANGE.Name
+  },
+  {
+    display: TradeTriggers.BullishBreakout.display,
+    value: TradeTriggers.BullishBreakout.ordinal,
+    color: SemanticUiColors.PINK.Name
+  },
+  {
+    display: TradeTriggers.BearishBreakout.display,
+    value: TradeTriggers.BearishBreakout.ordinal,
+    color: SemanticUiColors.YELLOW.Name
+  }
+];
+
+const booleanItems = [
+  {display: "Yes", value: true, color: SemanticUiColors.GREEN.Name},
+  {display: "No", value: false, color: SemanticUiColors.RED.Name}
 ];
 
 const bracketGoodItems = [
@@ -86,13 +103,14 @@ export class QuickTradeEditor extends React.Component {
       <div className="ui grid">
         <div className="ten wide column">
           <form className="ui form">
-            <div className="four fields">
+            <div className="six fields">
               <NumberInput
                 name="Size"
                 label="Size"
                 value={this.props.quickTrade.Size}
                 onChange={this.updateNormal}/>
-              <ToggleButton name="TradeType" label="Direction" items={tradeTypeItems} change={this.props.updateQuickTrade}></ToggleButton>
+              <ToggleButton name="TradeType" label="Direction" items={tradeTypeItems}
+                            change={this.props.updateQuickTrade}></ToggleButton>
               <NumberInput
                 name="RewardTicks"
                 label="Reward Ticks"
@@ -108,10 +126,13 @@ export class QuickTradeEditor extends React.Component {
                 label="Streak"
                 value={this.props.quickTrade.Streak}
                 onChange={this.updateNormal}/>
+              <ToggleButton name="Confident" label="Confident" items={booleanItems} change={this.props.updateQuickTrade}></ToggleButton>
             </div>
-            <div className="four fields">
-              <ToggleButton name="Trend" label="Trend" items={trendItems} change={this.props.updateQuickTrade}></ToggleButton>
-              <ToggleButton name="Trigger" label="Trigger" items={triggerItems} change={this.props.updateQuickTrade}></ToggleButton>
+            <div className="five fields">
+              <ToggleButton name="Trend" label="Trend" items={trendItems}
+                            change={this.props.updateQuickTrade}></ToggleButton>
+              <ToggleButton name="Trigger" label="Trigger" items={triggerItems}
+                            change={this.props.updateQuickTrade}></ToggleButton>
               <NumberInput
                 name="ATR"
                 label="ATR"
@@ -123,6 +144,7 @@ export class QuickTradeEditor extends React.Component {
                 step=".05"
                 value={this.props.quickTrade.SmaDiff}
                 onChange={this.updateNormal}/>
+              <ToggleButton name="GoodTargets" label="Good Targets" items={booleanItems} change={this.props.updateQuickTrade}></ToggleButton>
             </div>
           </form>
         </div>
