@@ -22,6 +22,7 @@ const trendItems = [
 ];
 
 const triggerItems = [
+  {display: TradeTriggers.Contrarian.display, value: TradeTriggers.Contrarian.ordinal, color: SemanticUiColors.BLUE.Name},
   {display: TradeTriggers.Signals.display, value: TradeTriggers.Signals.ordinal, color: SemanticUiColors.GREEN.Name},
   {display: TradeTriggers.Support.display, value: TradeTriggers.Support.ordinal, color: SemanticUiColors.PURPLE.Name},
   {

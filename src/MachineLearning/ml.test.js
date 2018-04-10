@@ -3,9 +3,16 @@ let should = chai.should();
 import _ from 'underscore';
 import moment from 'moment';
 import TradeService from '../services/tradeService';
-const crossValidation = require('ml-cross-validation');
-import {getDecisionTreeObservationFromTrade, DecisionTree, entropy, getObservationsFromModels,
-  buildTreeAsync, PredictionAlgorithm, loadPredictionAlgorithmAsync} from './';
+import cTable from 'console.table';
+
+const crossValidation = require('./crossValidation');
+import LogisticRegression from 'ml-logistic-regression';
+
+import {
+  getDecisionTreeObservationFromTrade, DecisionTree, entropy, getObservationsFromModels,
+  buildTreeAsync, PredictionAlgorithm, loadPredictionAlgorithmAsync, getTradeMlDescriptions,
+  MlDescription, MlFeature, MlFeatureTypes
+} from './';
 
 const my_data = [['slashdot', 'USA', 'yes', 18],
   ['google', 'France', 'yes', 23],
@@ -73,13 +80,13 @@ describe('Prediction Engine', () => {
       });
     });
 
-    describe('buildTreeAsync', () => {
-      it('it should properly build a tree asynchronously', async() => {
-        const decisionTree = await loadPredictionAlgorithmAsync("DecisionTree", my_data, my_labels, {scoref: entropy});
-        decisionTree.algorithm.tree.col.should.be.eql(0);
-        decisionTree.algorithm.tree.value.should.be.eql('google');
-      });
-    });
+    // describe('buildTreeAsync', () => {
+    //   it('it should properly build a tree asynchronously', async () => {
+    //     const decisionTree = await loadPredictionAlgorithmAsync("DecisionTree", my_data, my_labels, {scoref: entropy});
+    //     decisionTree.algorithm.tree.col.should.be.eql(0);
+    //     decisionTree.algorithm.tree.value.should.be.eql('google');
+    //   });
+    // });
 
     describe('predict', () => {
       it('it should properly predict a label given an observation', () => {
@@ -92,7 +99,7 @@ describe('Prediction Engine', () => {
     });
 
     describe('crossValidate', () => {
-      it('it should properly cross validate a decision tree', async() => {
+      it('it should properly cross validate a decision tree', async () => {
         const [observations, labels] = getObservationsFromModels(trades, getDecisionTreeObservationFromTrade);
 
         const confusionMatrix = crossValidation.kFold(DecisionTree, observations, labels, {scoref: entropy}, 10);
@@ -130,6 +137,57 @@ describe('Prediction Engine', () => {
 
         actual_observation.should.be.eql(expected_observation);
         actual_label.should.be.eql(expected_label);
+      });
+    });
+  });
+
+  describe('ML Classes', () => {
+    describe('ML Feature Factor', () => {
+      it('it should properly create a feature with a factor', () => {
+        const values = ["a", "a", "a", "a", "a", "a", "b", "b", "b", "b", "b", "c", "c", "c", "c",];
+        const feature = new MlFeature("test", MlFeatureTypes.Nominal, null, values);
+
+        const expected = {
+          a: 3.5,
+          b: 3,
+          c: 2.5
+        };
+
+        feature.factor.should.be.eql(expected);
+      });
+    });
+
+    describe('ML Description', () => {
+      it('it should properly create a ML Description', () => {
+        let mlDescription = getTradeMlDescriptions(trades);
+
+        const [observations, labels] = mlDescription.getObservations();
+
+        mlDescription.features.length.should.be.eql(6);
+
+        //const confusionMatrix = crossValidation.kFold(LogisticRegression, observations, labels, {numSteps: 1000, learningRate: 5e-3}, 10);
+        const report = crossValidation.kFoldJTimes(LogisticRegression, observations, labels, {
+            numSteps: 1000,
+            learningRate: 5e-3
+          }, Math.floor(trades.length * .2), 1,
+          [{
+            label: "accuracy", getData: function (cm) {
+              return cm.accuracy;
+            }
+          },
+          {
+            label: "NPV", getData: function (cm) {
+              return cm.getNegativePredictiveValue(1);
+            }
+          },
+          {
+            label: "specificity", getData: function (cm) {
+              return cm.getTrueNegativeRate(1);
+            }
+          }]);
+
+        //console.table(report);
+
       });
     });
   });

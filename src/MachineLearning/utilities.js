@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import {TradeTypes, TradeTriggers, TrendTypes} from 'wave-trader-enums';
+import {MlDescription, MlFeatureTypes} from "./index";
 
 
 // quickTrade: {
@@ -50,4 +51,22 @@ export function getDecisionTreeObservationFromTrade(trade) {
   }
 
   return [observation, label];
+}
+
+export function getTradeMlDescriptions(trades) {
+  let mlDescription = new MlDescription(trades);
+  mlDescription.addFeature("TradeType", MlFeatureTypes.MultiBinary);
+  mlDescription.addFeature("Trigger", MlFeatureTypes.Nominal);
+  mlDescription.addFeature("Trend", MlFeatureTypes.MultiBinary);
+  mlDescription.addFeature("Streak", MlFeatureTypes.Numeric);
+  mlDescription.addFeature("ATR", MlFeatureTypes.Numeric);
+  mlDescription.addFeature("SmaDiff", MlFeatureTypes.Numeric);
+
+  mlDescription.addLabel("AdjProfitLoss", MlFeatureTypes.SingleBinary, function (val) {
+    return val > 0;
+  });
+
+  mlDescription.fillObservations();
+
+  return mlDescription;
 }

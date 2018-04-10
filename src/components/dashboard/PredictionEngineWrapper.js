@@ -8,8 +8,8 @@ export class PredictionEngineWrapper extends Component {
   renderAlgorithms = () => {
     let algorithmRows = [];
 
-    for (let [key, algorithm] of this.props.predictionEngine.algorithms.entries()) {
-      algorithmRows.push(<div key={key}>{algorithm.name}</div>);
+    for (let predictionAlgorithm of this.props.predictionEngine.algorithms) {
+      algorithmRows.push(<div key={predictionAlgorithm.name}>{predictionAlgorithm.name}</div>);
     }
 
     return algorithmRows;

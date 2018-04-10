@@ -35,6 +35,8 @@ export class DashboardDetailsWrapper extends React.Component {
                updateIndex={this.updateActiveTabIndex}/>
           <Tab index={3} activeIndex={this.state.activeTabIndex} display={"Trades"}
                updateIndex={this.updateActiveTabIndex}/>
+          <Tab index={4} activeIndex={this.state.activeTabIndex} display={"ML"}
+               updateIndex={this.updateActiveTabIndex}/>
         </div>
         <TabContent index={0} activeIndex={this.state.activeTabIndex}>
           <div className="ui grid">
@@ -73,6 +75,9 @@ export class DashboardDetailsWrapper extends React.Component {
         </TabContent>
         <TabContent index={3} activeIndex={this.state.activeTabIndex}>
           {false && this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
+        </TabContent>
+        <TabContent index={4} activeIndex={this.state.activeTabIndex}>
+          ML
         </TabContent>
       </div>
     );

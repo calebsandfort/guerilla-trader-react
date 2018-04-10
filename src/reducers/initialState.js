@@ -41,7 +41,9 @@ export default {
   },
   currentDate: new Date(),
   predictionEngine: {
-    algorithms: new Map()
+    algorithms: [],
+    error: {},
+    performanceReports: []
   },
   dayTracker: {
     id: 0,
@@ -87,7 +89,7 @@ export default {
       Last: 0,
       TradingAccountId: 0,
       TradeType: 1,
-      Trigger: 1,
+      Trigger: 6,
       Trend: 1,
       Streak: 0,
       EntryDate: '',
@@ -95,8 +97,8 @@ export default {
       ATR: 18,
       SmaDiff: 1,
       EntryPrice: 0,
-      RewardTicks: 12.0,
-      RiskTicks: 23.0,
+      RewardTicks: 8.0,
+      RiskTicks: 12.0,
       RoundTripCommissions: 6.88,
       get Reward(){
         return this.Market.TickValue * this.RewardTicks * this.Size;
