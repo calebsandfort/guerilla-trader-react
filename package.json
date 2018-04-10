@@ -21,7 +21,7 @@
     "remove-dist": "rimraf ./dist",
     "prebuild": "npm run lint && npm run test && npm run clean-dist",
     "build": "babel-node tools/build.js && npm run open:dist",
-    "prebuild-aws": "npm run lint && npm run test && npm run clean-dist",
+    "prebuild-aws": "npm run lint && npm run clean-dist",
     "build-aws": "babel-node tools/build.js",
     "test": "npm run test:mocha",
     "test:CI": "babel-node tools/testCi.js",
