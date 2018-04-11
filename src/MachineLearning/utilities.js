@@ -14,19 +14,19 @@ import {MlDescription, MlFeatureTypes} from "./index";
 //     AdjProfitLoss
 // }
 
-export function getObservationsFromModels(models, mappingFunc){
+export function getObservationsFromModels(models, mappingFunc) {
   const observations = [];
   const labels = [];
 
   let observation = [];
   let label = null;
 
-  for(let model of models){
+  for (let model of models) {
     [observation, label] = mappingFunc(model);
 
     observations.push(observation);
 
-    if(label != null){
+    if (label != null) {
       labels.push(label);
     }
   }
@@ -69,4 +69,44 @@ export function getTradeMlDescriptions(trades) {
   mlDescription.fillObservations();
 
   return mlDescription;
+}
+
+export function getTradeReportItems() {
+  return [{
+    label: "accuracy",
+    getData: function (cm) {
+      return cm.accuracy;
+    },
+    formatString: "{0:P0}"
+  },
+    {
+      label: "NPV",
+      getData: function (cm) {
+        const temp = cm.getNegativePredictiveValue(1);
+        return isNaN(temp) ? 0 : temp;
+      },
+      formatString: "{0:P0}"
+    },
+    {
+      label: "specificity",
+      getData: function (cm) {
+        const temp = cm.getTrueNegativeRate(1);
+        return isNaN(temp) ? 0 : temp;
+      },
+      formatString: "{0:P0}"
+    },
+    {
+      label: "trueNegativeCount",
+      getData: function (cm) {
+        return cm.getTrueNegativeCount(1);
+      },
+      formatString: "{0:N0}"
+    },
+    {
+      label: "falseNegativeCount",
+      getData: function (cm) {
+        return cm.getFalseNegativeCount(1);
+      },
+      formatString: "{0:N0}"
+    }];
 }

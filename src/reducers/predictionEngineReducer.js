@@ -9,13 +9,19 @@ import initialState from './initialState';
 import {buildMlAlgorithmSuccess, buildMlAlgorithmFailed, generateMlAlgorithmReportSuccess, generateMlAlgorithmReportFailed} from '../actions/predictionEngineActions';
 import {
   DecisionTree, getDecisionTreeObservationFromTrade, getObservationsFromModels,
-  buildTreeAsync, entropy, loadPredictionAlgorithmAsync, getTradeMlDescriptions, kFoldJTimesAsync
+  buildTreeAsync, entropy, loadPredictionAlgorithmAsync, getTradeMlDescriptions, getTradeReportItems,
+  kFoldJTimesAsync
 } from '../MachineLearning';
 
 import LogisticRegression from 'ml-logistic-regression';
 import SVM from 'ml-svm';
 import {GaussianNB, MultinomialNB} from 'ml-naivebayes';
 import {DecisionTreeClassifier} from 'ml-cart';
+import {RandomForestClassifier as RFClassifier} from 'ml-random-forest';
+import FeedforwardNeuralNetwork from 'ml-fnn';
+import xsadd from 'ml-xsadd';
+const random = new xsadd(0).random;
+
 
 import _ from 'underscore';
 
@@ -27,24 +33,11 @@ export default function predictionEnginReducer(state = initialState.predictionEn
       const [observations, labels] = getObservationsFromModels(action.trades.data, getDecisionTreeObservationFromTrade);
 
       let mlDescription = getTradeMlDescriptions(action.trades.data);
-      const k = Math.floor(action.trades.data.length * .2);
+      //const k = Math.floor(action.trades.data.length * .2);
+      const k = 5;
       const j = 10;
 
-      const reportItems = [{
-        label: "accuracy", getData: function (cm) {
-          return cm.accuracy;
-        }
-      },
-      {
-        label: "NPV", getData: function (cm) {
-          return cm.getNegativePredictiveValue(1);
-        }
-      },
-      {
-        label: "specificity", getData: function (cm) {
-          return cm.getTrueNegativeRate(1);
-        }
-      }];
+      const reportItems = getTradeReportItems();
 
       const logisticRegressionOptions = {
         numSteps: 1000,
@@ -57,6 +50,13 @@ export default function predictionEnginReducer(state = initialState.predictionEn
         minNumSamples: 3
       };
 
+      const randomForestOptions = {
+        seed: 3,
+        maxFeatures: 0.8,
+        replacement: true,
+        nEstimators: 25
+      };
+
       //kFoldJTimesAsync(name, Classifier, mlDescription, classifierOptions, k, j, reportItemInfos)
 
       return loop(
@@ -67,11 +67,11 @@ export default function predictionEnginReducer(state = initialState.predictionEn
             failActionCreator: buildMlAlgorithmFailed,
             args: ["LogisticRegression", mlDescription, logisticRegressionOptions]
           }),
-          Cmd.run(loadPredictionAlgorithmAsync, {
-            successActionCreator: buildMlAlgorithmSuccess,
-            failActionCreator: buildMlAlgorithmFailed,
-            args: ["SVM", mlDescription]
-          }),
+          // Cmd.run(loadPredictionAlgorithmAsync, {
+          //   successActionCreator: buildMlAlgorithmSuccess,
+          //   failActionCreator: buildMlAlgorithmFailed,
+          //   args: ["SVM", mlDescription, {random}]
+          // }),
           Cmd.run(loadPredictionAlgorithmAsync, {
             successActionCreator: buildMlAlgorithmSuccess,
             failActionCreator: buildMlAlgorithmFailed,
@@ -87,6 +87,16 @@ export default function predictionEnginReducer(state = initialState.predictionEn
             failActionCreator: buildMlAlgorithmFailed,
             args: ["DecisionTreeClassifier", mlDescription, decisionTreeClassifierOptions]
           }),
+          Cmd.run(loadPredictionAlgorithmAsync, {
+            successActionCreator: buildMlAlgorithmSuccess,
+            failActionCreator: buildMlAlgorithmFailed,
+            args: ["RandomForestClassifier", mlDescription, randomForestOptions]
+          }),
+          Cmd.run(loadPredictionAlgorithmAsync, {
+            successActionCreator: buildMlAlgorithmSuccess,
+            failActionCreator: buildMlAlgorithmFailed,
+            args: ["FNN", mlDescription]
+          }),
 
           Cmd.run(kFoldJTimesAsync, {
             successActionCreator: generateMlAlgorithmReportSuccess,
@@ -94,11 +104,11 @@ export default function predictionEnginReducer(state = initialState.predictionEn
             args: ["LogisticRegression", LogisticRegression, mlDescription, logisticRegressionOptions, k, j, reportItems]
           }),
 
-          Cmd.run(kFoldJTimesAsync, {
-            successActionCreator: generateMlAlgorithmReportSuccess,
-            failActionCreator: generateMlAlgorithmReportFailed,
-            args: ["SVM", SVM, mlDescription, null, k, j, reportItems]
-          }),
+          // Cmd.run(kFoldJTimesAsync, {
+          //   successActionCreator: generateMlAlgorithmReportSuccess,
+          //   failActionCreator: generateMlAlgorithmReportFailed,
+          //   args: ["SVM", SVM, mlDescription, {random}, k, j, reportItems]
+          // }),
           Cmd.run(kFoldJTimesAsync, {
             successActionCreator: generateMlAlgorithmReportSuccess,
             failActionCreator: generateMlAlgorithmReportFailed,
@@ -113,6 +123,16 @@ export default function predictionEnginReducer(state = initialState.predictionEn
             successActionCreator: generateMlAlgorithmReportSuccess,
             failActionCreator: generateMlAlgorithmReportFailed,
             args: ["DecisionTreeClassifier", DecisionTreeClassifier, mlDescription, decisionTreeClassifierOptions, k, j, reportItems]
+          }),
+          Cmd.run(kFoldJTimesAsync, {
+            successActionCreator: generateMlAlgorithmReportSuccess,
+            failActionCreator: generateMlAlgorithmReportFailed,
+            args: ["RandomForestClassifier", RFClassifier, mlDescription, randomForestOptions, k, j, reportItems]
+          }),
+          Cmd.run(kFoldJTimesAsync, {
+            successActionCreator: generateMlAlgorithmReportSuccess,
+            failActionCreator: generateMlAlgorithmReportFailed,
+            args: ["FNN", FeedforwardNeuralNetwork, mlDescription, null, k, j, reportItems]
           })
         ])
       );

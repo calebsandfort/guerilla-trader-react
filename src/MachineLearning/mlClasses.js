@@ -54,6 +54,12 @@ export class MlFeature {
     if(featureType == MlFeatureTypes.Nominal) {
       this.factor = this.generateFactor(values);
     }
+
+    if(featureType == MlFeatureTypes.NormalizedNumeric){
+      this.max = _.max(values);
+      this.min = _.min(values);
+      this.normalizedNumerator = this.max - this.min;
+    }
   }
 
   getObservationValue(sample){
@@ -71,6 +77,17 @@ export class MlFeature {
         break;
       case MlFeatureTypes.Nominal:
         mlValue.push(this.factor[obsValue.toString()]);
+        break;
+      case MlFeatureTypes.NormalizedNumeric:
+        if(obsValue < this.min){
+          mlValue.push(0);
+        }
+        else if(obsValue > this.max){
+          mlValue.push(1);
+        }
+        else {
+          mlValue.push((obsValue - this.min) / this.normalizedNumerator);
+        }
         break;
       default:
         mlValue.push(obsValue);
@@ -100,5 +117,6 @@ export const MlFeatureTypes = {
   MultiBinary: 2,
   Nominal: 3,
   Numeric: 4,
-  Ordinal: 5
+  Ordinal: 5,
+  NormalizedNumeric: 6
 };

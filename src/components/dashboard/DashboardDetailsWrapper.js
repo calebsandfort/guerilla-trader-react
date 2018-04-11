@@ -7,6 +7,7 @@ import MacroDetails from './MacroDetails';
 import DayTrackerComponent from './DayTrackerComponent';
 import DailyPerformanceWrapper from './DailyPerformanceWrapper';
 import StreamingDataWrapper from './StreamingDataWrapper';
+import MlPerformanceReportsGrid from './MlPerformanceReportsGrid';
 
 export class DashboardDetailsWrapper extends React.Component {
   constructor(props, context) {
@@ -77,7 +78,7 @@ export class DashboardDetailsWrapper extends React.Component {
           {false && this.props.tradingAccount.Trades && <TradesGrid trades={this.props.tradingAccount.Trades}/>}
         </TabContent>
         <TabContent index={4} activeIndex={this.state.activeTabIndex}>
-          ML
+          { this.props.predictionEngine.performanceReports.length > 0 && <MlPerformanceReportsGrid performanceReports={this.props.predictionEngine.performanceReports} />}
         </TabContent>
       </div>
     );

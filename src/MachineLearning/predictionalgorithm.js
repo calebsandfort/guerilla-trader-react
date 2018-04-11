@@ -3,6 +3,8 @@ import SVM from 'ml-svm';
 import {GaussianNB, MultinomialNB} from 'ml-naivebayes';
 import Matrix from 'ml-matrix';
 import {DecisionTreeClassifier} from 'ml-cart';
+import {RandomForestClassifier as RFClassifier} from 'ml-random-forest';
+import FeedforwardNeuralNetwork from 'ml-fnn';
 const crossValidation = require('./crossValidation');
 
 export class PredictionAlgorithm {
@@ -47,6 +49,16 @@ export function loadPredictionAlgorithmAsync(name, mlDescription, options = {}) 
           algorithm.train(observations, labels);
           break;
         }
+        case "RandomForestClassifier": {
+          algorithm = new RFClassifier(options);
+          algorithm.train(observations, labels);
+          break;
+        }
+        case "FNN": {
+          algorithm = new FeedforwardNeuralNetwork(options);
+          algorithm.train(new Matrix(observations), labels);
+          break;
+        }
       }
 
       predictionAlgorithm = new PredictionAlgorithm(name, algorithm);
@@ -62,7 +74,13 @@ export function kFoldJTimesAsync(name, Classifier, mlDescription, classifierOpti
   return new Promise((resolve, reject) => {
     const [observations, labels] = mlDescription.getObservations();
     try {
-      let report = {name: name, items: crossValidation.kFoldJTimes(Classifier, observations, labels, classifierOptions, k, j, reportItemInfos)};
+      const items = crossValidation.kFoldJTimes(Classifier, observations, labels, classifierOptions, k, j, reportItemInfos);
+      let report = {name: name};
+
+      for(let item of items){
+        report[item.label] = item.val;
+      }
+
       resolve(report);
     }
     catch (error) {

@@ -1,12 +1,13 @@
 /* eslint-disable */
 'use strict';
 
+import FeedforwardNeuralNetwork from "ml-fnn";
+
 const ConfusionMatrix = require('ml-confusion-matrix');
 
 const CV = {};
 const combinations = require('ml-combinations');
 import Matrix from 'ml-matrix';
-import numeral from 'numeral';
 
 /**
  * Performs a leave-one-out cross-validation (LOO-CV) of the given samples. In LOO-CV, 1 observation is used as the
@@ -97,7 +98,7 @@ CV.kFoldJTimes = function (Classifier, features, labels, classifierOptions, k, j
     }
   }
 
-  return report.map(x => {return {"label": x.label, "val": numeral(x.average).format('0%')}});
+  return report.map(x => {return {"label": x.label, "val": Number.parseFloat(Number.parseFloat(x.average).toFixed(2))}});
 }
 
 /**
@@ -156,6 +157,10 @@ CV.kFold = function (Classifier, features, labels, classifierOptions, k) {
     else if(Classifier.name == "LogisticRegression") {
       //classifierOptions.log("yaosdjfals;dkladsf");
       validateLogisticRegression(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct);
+    }
+    else if(Classifier.name == "FeedforwardNeuralNetwork") {
+      //classifierOptions.log("yaosdjfals;dkladsf");
+      validateFnn(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct);
     }
     else {
       validate(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct);
@@ -218,6 +223,21 @@ function validateLogisticRegression(Classifier, features, labels, classifierOpti
     classifier.train(new Matrix(trainFeatures), Matrix.columnVector(trainLabels));
   } else {
     classifier = new Classifier(new Matrix(trainFeatures), Matrix.columnVector(trainLabels), classifierOptions);
+  }
+
+  var predictedLabels = classifier.predict(new Matrix(testFeatures));
+  updateConfusionMatrix(confusionMatrix, testLabels, predictedLabels, distinct);
+}
+
+function validateFnn(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct) {
+  const {testFeatures, trainFeatures, testLabels, trainLabels} = getTrainTest(features, labels, testIdx, trainIdx);
+
+  var classifier;
+  if (Classifier.prototype.train) {
+    classifier = new Classifier(classifierOptions);
+    classifier.train(new Matrix(trainFeatures), Matrix.columnVector(trainLabels));
+  } else {
+    classifier = new Classifier(new Matrix(trainFeatures), trainLabels, classifierOptions);
   }
 
   var predictedLabels = classifier.predict(new Matrix(testFeatures));

@@ -28,17 +28,25 @@ export class DailyPerformanceWrapper extends React.Component {
     super(props, context);
 
     this.state = {
-      chartOptions: this.buildAllChartOptions()
+      chartOptions: this.buildAllChartOptions(this.props.dailyPerformanceState.performanceCycleType)
     };
   }
 
-  buildAllChartOptions() {
-    const filteredPerformanceCycles = this.props.performanceCycles.filter(x => x.CycleType === this.props.dailyPerformanceState.performanceCycleType);
-    const performanceCycleType = PerformanceCycleTypes.enumOrdinalOf(this.props.dailyPerformanceState.performanceCycleType);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.dailyPerformanceState.performanceCycleType != nextProps.dailyPerformanceState.performanceCycleType) {
+      this.setState({
+        chartOptions: this.buildAllChartOptions(nextProps.dailyPerformanceState.performanceCycleType)
+      });
+    }
+  }
+
+  buildAllChartOptions(pct) {
+    const filteredPerformanceCycles = this.props.performanceCycles.filter(x => x.CycleType === pct);
+    const performanceCycleType = PerformanceCycleTypes.enumOrdinalOf(pct);
 
     let displayKey = "Display";
 
-    switch (this.props.dailyPerformanceState.performanceCycleType) {
+    switch (pct) {
       case PerformanceCycleTypes.Day.ordinal:
         displayKey = "Position";
         break;

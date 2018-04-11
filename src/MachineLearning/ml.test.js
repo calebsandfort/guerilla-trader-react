@@ -7,10 +7,14 @@ import cTable from 'console.table';
 
 const crossValidation = require('./crossValidation');
 import LogisticRegression from 'ml-logistic-regression';
+import SVM from 'ml-svm';
+import xsadd from 'ml-xsadd';
+const random = new xsadd(0).random;
+import {GaussianNB, MultinomialNB} from 'ml-naivebayes';
 
 import {
   getDecisionTreeObservationFromTrade, DecisionTree, entropy, getObservationsFromModels,
-  buildTreeAsync, PredictionAlgorithm, loadPredictionAlgorithmAsync, getTradeMlDescriptions,
+  buildTreeAsync, PredictionAlgorithm, loadPredictionAlgorithmAsync, getTradeMlDescriptions, getTradeReportItems,
   MlDescription, MlFeature, MlFeatureTypes
 } from './';
 
@@ -34,6 +38,13 @@ const my_data = [['slashdot', 'USA', 'yes', 18],
 const my_labels = ['None', 'Premium', 'Basic', 'Basic', 'Premium', 'None', 'Basic', 'Premium', 'None', 'None', 'None', 'None', 'Basic', 'None', 'Basic', 'Basic'];
 
 let trades = [];
+
+let svmData = {
+  linear1: {
+    features: [[0, -200], [400, 600], [200, 0]],
+    labels: [-1, 1, -1]
+  }
+};
 
 describe('Prediction Engine', () => {
 
@@ -98,46 +109,62 @@ describe('Prediction Engine', () => {
       });
     });
 
-    describe('crossValidate', () => {
-      it('it should properly cross validate a decision tree', async () => {
-        const [observations, labels] = getObservationsFromModels(trades, getDecisionTreeObservationFromTrade);
+    // describe('crossValidate', () => {
+    //   it('it should properly cross validate a decision tree', async () => {
+    //     const [observations, labels] = getObservationsFromModels(trades, getDecisionTreeObservationFromTrade);
+    //
+    //     const confusionMatrix = crossValidation.kFold(DecisionTree, observations, labels, {scoref: entropy}, 10);
+    //
+    //     //console.log("accuracy", confusionMatrix.accuracy);
+    //     // console.log("PPV", confusionMatrix.getPositivePredictiveValue("win"));
+    //     // console.log("sensitivity", confusionMatrix.getTruePositiveRate("win"));
+    //     // //What I care about
+    //     // console.log("NPV", confusionMatrix.getNegativePredictiveValue("win"));
+    //     // console.log("specificity", confusionMatrix.getTrueNegativeRate("win"));
+    //
+    //     // const decisionTree = await loadPredictionAlgorithmAsync("DecisionTree", observations, labels, {scoref: entropy});
+    //     // decisionTree.algorithm.tree.col.should.be.eql(0);
+    //     // decisionTree.algorithm.tree.value.should.be.eql('google');
+    //   });
+    // });
 
-        const confusionMatrix = crossValidation.kFold(DecisionTree, observations, labels, {scoref: entropy}, 10);
+    // describe('getDecisionTreeObservationFromTrade', () => {
+    //   it('it should properly create an observation from a trade', () => {
+    //     const trade = {
+    //       TradeType: 1,
+    //       Trigger: 1,
+    //       Trend: 1,
+    //       Streak: 0,
+    //       EntryDate: moment().format("M/D/YYYY h:mm:ss a"),
+    //       ATR: 18,
+    //       SmaDiff: 1,
+    //       AdjProfitLoss: 100
+    //     };
+    //
+    //     let expected_observation = ["Long", "Signals", "Bearish", 0, (new Date(trade.EntryDate)).getHours(), 18, 1];
+    //     let expected_label = "win";
+    //
+    //     const [actual_observation, actual_label] = getDecisionTreeObservationFromTrade(trade);
+    //
+    //     actual_observation.should.be.eql(expected_observation);
+    //     actual_label.should.be.eql(expected_label);
+    //   });
+    // });
+  });
 
-        //console.log("accuracy", confusionMatrix.accuracy);
-        // console.log("PPV", confusionMatrix.getPositivePredictiveValue("win"));
-        // console.log("sensitivity", confusionMatrix.getTruePositiveRate("win"));
-        // //What I care about
-        // console.log("NPV", confusionMatrix.getNegativePredictiveValue("win"));
-        // console.log("specificity", confusionMatrix.getTrueNegativeRate("win"));
+  describe('GaussianNB', function () {
+    it('should solve a linearly separable case', function () {
+      let mlDescription = getTradeMlDescriptions(trades);
 
-        // const decisionTree = await loadPredictionAlgorithmAsync("DecisionTree", observations, labels, {scoref: entropy});
-        // decisionTree.algorithm.tree.col.should.be.eql(0);
-        // decisionTree.algorithm.tree.value.should.be.eql('google');
-      });
-    });
+      const [observations, labels] = mlDescription.getObservations();
 
-    describe('getDecisionTreeObservationFromTrade', () => {
-      it('it should properly create an observation from a trade', () => {
-        const trade = {
-          TradeType: 1,
-          Trigger: 1,
-          Trend: 1,
-          Streak: 0,
-          EntryDate: moment().format("M/D/YYYY h:mm:ss a"),
-          ATR: 18,
-          SmaDiff: 1,
-          AdjProfitLoss: 100
-        };
+      const svm = new SVM({random});
+      svm.train(observations, labels);
+      //console.log(svm.predict(observations[0]));
+      // svm.predict(observations).should.eql(labels);
+      // svm.predict(observations[0]).should.eql(labels[0]);
+      // svm.supportVectors().should.eql([1, 2]);
 
-        let expected_observation = ["Long", "Signals", "Bearish", 0, (new Date(trade.EntryDate)).getHours(), 18, 1];
-        let expected_label = "win";
-
-        const [actual_observation, actual_label] = getDecisionTreeObservationFromTrade(trade);
-
-        actual_observation.should.be.eql(expected_observation);
-        actual_label.should.be.eql(expected_label);
-      });
     });
   });
 
@@ -166,25 +193,7 @@ describe('Prediction Engine', () => {
         mlDescription.features.length.should.be.eql(6);
 
         //const confusionMatrix = crossValidation.kFold(LogisticRegression, observations, labels, {numSteps: 1000, learningRate: 5e-3}, 10);
-        const report = crossValidation.kFoldJTimes(LogisticRegression, observations, labels, {
-            numSteps: 1000,
-            learningRate: 5e-3
-          }, Math.floor(trades.length * .2), 1,
-          [{
-            label: "accuracy", getData: function (cm) {
-              return cm.accuracy;
-            }
-          },
-          {
-            label: "NPV", getData: function (cm) {
-              return cm.getNegativePredictiveValue(1);
-            }
-          },
-          {
-            label: "specificity", getData: function (cm) {
-              return cm.getTrueNegativeRate(1);
-            }
-          }]);
+        const report = crossValidation.kFoldJTimes(GaussianNB, observations, labels, null, 5, 1, getTradeReportItems());
 
         //console.table(report);
 
