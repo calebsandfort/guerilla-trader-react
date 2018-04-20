@@ -8,6 +8,9 @@ const ConfusionMatrix = require('ml-confusion-matrix');
 const CV = {};
 const combinations = require('ml-combinations');
 import Matrix from 'ml-matrix';
+import _ from 'underscore';
+import cTable from 'console.table';
+import numeral from 'numeral';
 
 /**
  * Performs a leave-one-out cross-validation (LOO-CV) of the given samples. In LOO-CV, 1 observation is used as the
@@ -112,15 +115,21 @@ CV.kFoldJTimes = function (Classifier, features, labels, classifierOptions, k, j
  * @param {number} k - The number of partitions to create
  * @return {ConfusionMatrix} - The cross-validation confusion matrix
  */
-CV.kFold = function (Classifier, features, labels, classifierOptions, k) {
+CV.kFold = function (Classifier, features, labels, classifierOptions, k, log = false) {
   if (typeof classifierOptions === 'function') {
     var callback = classifierOptions;
     k = labels;
     labels = features;
     features = Classifier;
   }
+
   check(features, labels);
   const distinct = getDistinct(labels);
+
+  if(log){
+    logPTable("Master:", distinct, labels);
+  }
+
   const confusionMatrix = initMatrix(distinct.length, distinct.length);
   var N = features.length;
   var allIdx = new Array(N);
@@ -163,7 +172,7 @@ CV.kFold = function (Classifier, features, labels, classifierOptions, k) {
       validateFnn(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct);
     }
     else {
-      validate(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct);
+      validate(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct, log);
     }
   }
 
@@ -199,8 +208,23 @@ function getDistinct(arr) {
   return Array.from(s);
 }
 
-function validate(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct) {
+function logPTable(name, distinct, labels){
+  console.log(name);
+  console.table(distinct.map(x => {
+    return {
+      label: x,
+      p: numeral(_.filter(labels, y => y == x).length / labels.length).format('0%')
+    };
+  }));
+}
+
+function validate(Classifier, features, labels, classifierOptions, testIdx, trainIdx, confusionMatrix, distinct, log = false) {
   const {testFeatures, trainFeatures, testLabels, trainLabels} = getTrainTest(features, labels, testIdx, trainIdx);
+
+  if(log){
+    logPTable("train:", distinct, trainLabels);
+    logPTable("test:", distinct, testLabels);
+  }
 
   var classifier;
   if (Classifier.prototype.train) {

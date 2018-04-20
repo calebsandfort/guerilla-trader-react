@@ -8,6 +8,7 @@ import cTable from 'console.table';
 const crossValidation = require('./crossValidation');
 import LogisticRegression from 'ml-logistic-regression';
 import SVM from 'ml-svm';
+import {DecisionTreeClassifier} from 'ml-cart';
 import xsadd from 'ml-xsadd';
 const random = new xsadd(0).random;
 import {GaussianNB, MultinomialNB} from 'ml-naivebayes';
@@ -194,6 +195,26 @@ describe('Prediction Engine', () => {
 
         //const confusionMatrix = crossValidation.kFold(LogisticRegression, observations, labels, {numSteps: 1000, learningRate: 5e-3}, 10);
         const report = crossValidation.kFoldJTimes(GaussianNB, observations, labels, null, 5, 1, getTradeReportItems());
+
+        //console.table(report);
+
+      });
+    });
+
+    describe('ML Stratification', () => {
+      it('it should properly stratify a sample collection', () => {
+        let mlDescription = getTradeMlDescriptions(trades);
+
+        const decisionTreeClassifierOptions = {
+          gainFunction: 'gini',
+          maxDepth: 10,
+          minNumSamples: 3
+        };
+
+        const [observations, labels] = mlDescription.getObservations();
+
+        const confusionMatrix = crossValidation.kFold(DecisionTreeClassifier, observations, labels, decisionTreeClassifierOptions, 5);
+        //const report = crossValidation.kFoldJTimes(GaussianNB, observations, labels, null, 5, 1, getTradeReportItems());
 
         //console.table(report);
 

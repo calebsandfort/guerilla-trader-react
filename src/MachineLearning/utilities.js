@@ -94,19 +94,5 @@ export function getTradeReportItems() {
         return isNaN(temp) ? 0 : temp;
       },
       formatString: "{0:P0}"
-    },
-    {
-      label: "trueNegativeCount",
-      getData: function (cm) {
-        return cm.getTrueNegativeCount(1);
-      },
-      formatString: "{0:N0}"
-    },
-    {
-      label: "falseNegativeCount",
-      getData: function (cm) {
-        return cm.getFalseNegativeCount(1);
-      },
-      formatString: "{0:N0}"
     }];
 }

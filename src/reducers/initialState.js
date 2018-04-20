@@ -53,7 +53,7 @@ export default {
       TickValue: 5.00,
       RewardTicks: 12.0,
       RiskTicks: 23.0,
-      RoundTripCommissions: 6.88,
+      RoundTripCommissions: 4.06,
       Contracts: 3,
       get Reward(){
         return this.TickValue * this.RewardTicks * this.Contracts;
@@ -94,12 +94,12 @@ export default {
       Streak: 0,
       EntryDate: '',
       Size: 3,
-      ATR: 18,
+      ATR: 12,
       SmaDiff: 1,
       EntryPrice: 0,
-      RewardTicks: 8.0,
+      RewardTicks: 5.0,
       RiskTicks: 12.0,
-      RoundTripCommissions: 6.88,
+      RoundTripCommissions: 4.06,
       get Reward(){
         return this.Market.TickValue * this.RewardTicks * this.Size;
       },
